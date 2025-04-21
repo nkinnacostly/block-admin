@@ -45,10 +45,11 @@ const LoginComponent: React.FC = () => {
     try {
       const response = await mutateAsync(userData);
       if (response) {
+        console.log(response, "response");
         toast.success(`Login Successful`);
         Cookies.set("__session", response?.token);
         storeItemToSessionStorage({ key: "__session", value: response?.token });
-        setLoggedInUserDetails(response.user);
+        setLoggedInUserDetails(response.data);
         router.push("/dashboard");
       }
     } catch (error: any) {

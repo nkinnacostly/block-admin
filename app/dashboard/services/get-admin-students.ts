@@ -1,9 +1,9 @@
 import useFetchLevel2 from "@/hooks/useFetchLevel2";
 
-export const useGetCalendars = () => {
+export const useGetAdminStudents = () => {
   const { useGetRequest2 } = useFetchLevel2();
-  const url = `/grouped-trades`;
-  const reqKey = ["calendars"];
+  const url = `/admin/get-all-users`;
+  const reqKey = ["admin-students"];
   const { data, error, isLoading } = useGetRequest2(url, reqKey);
 
   return { data, error, isLoading };

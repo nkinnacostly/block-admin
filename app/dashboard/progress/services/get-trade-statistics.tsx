@@ -1,9 +1,9 @@
 import useFetchLevel2 from "@/hooks/useFetchLevel2";
 
-export const useGetTradeStatistics = () => {
+export const useGetAllProfileTrades = () => {
   const { useGetRequest2 } = useFetchLevel2();
-  const url = `/trade-statistics`;
-  const reqKey = ["trade-statistics"];
+  const url = `/admin/all-profile-trades`;
+  const reqKey = ["all-profile-trades"];
   const { data, error, isLoading } = useGetRequest2(url, reqKey);
 
   return { data, error, isLoading };

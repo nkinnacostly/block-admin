@@ -10,8 +10,8 @@ import { MdDashboard } from "react-icons/md";
 import React, { memo, useMemo } from "react";
 import { TbTargetArrow } from "react-icons/tb";
 import { usePathname } from "next/navigation";
-import { useUserStore } from "@/store/store";
-import { useVideoStore } from "@/store/store";
+// import { useUserStore } from "@/store/store";
+// import { useVideoStore } from "@/store/store";
 
 const SidebarLink = memo(({ icon, title, link, isActive, disabled }) => (
   <Link
@@ -31,27 +31,27 @@ const SidebarLink = memo(({ icon, title, link, isActive, disabled }) => (
 SidebarLink.displayName = "SidebarLink";
 
 const DashboardSidebar = () => {
-  const { loggedInUserDetails } = useUserStore();
-  const { watchedVideos } = useVideoStore();
+  // const { loggedInUserDetails } = useUserStore();
+  // const { watchedVideos } = useVideoStore();
   // const router = useRouter();
-  const isLevel1 = loggedInUserDetails?.learners_level === "1";
+  // const isLevel1 = loggedInUserDetails?.learners_level === "1";
   const pathname = usePathname();
   // console.log(pathname, "This is pathname");
   const sideLinks = useMemo(
     () => [
       {
         icon: <MdDashboard />,
-        title: "Overview",
+        title: "Students",
         link: "/dashboard",
       },
       {
         icon: <GoBook />,
-        title: "Jounal Trades",
+        title: "All Journal Trades",
         link: "/dashboard/courses",
       },
       {
         icon: <GiProgression />,
-        title: "Progress",
+        title: "Trade Profile",
         link: "/dashboard/progress",
       },
       {
@@ -59,19 +59,19 @@ const DashboardSidebar = () => {
         title: "Copy Trades",
         link: "/dashboard/copy-trade",
       },
-      {
-        icon: <TbTargetArrow />,
-        title: "Refer and Earn",
-        link: "/dashboard/challenges",
-        disabled: watchedVideos !== 3 || isLevel1,
-      },
+      // {
+      //   icon: <TbTargetArrow />,
+      //   title: "Refer and Earn",
+      //   link: "/dashboard/challenges",
+      //   disabled: watchedVideos !== 3 || isLevel1,
+      // },
       {
         icon: <IoMdSettings />,
         title: "Settings",
         link: "/dashboard/settings",
       },
-    ],
-    [watchedVideos, isLevel1]
+    ]
+    // [watchedVideos, isLevel1]
   );
 
   return (

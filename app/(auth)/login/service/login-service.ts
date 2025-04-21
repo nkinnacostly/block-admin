@@ -1,4 +1,4 @@
-import { request } from "@/utils/network";
+import { request2 } from "@/utils/network";
 import { useMutation } from "@tanstack/react-query";
 
 interface LoginUserDetails {
@@ -8,15 +8,15 @@ interface LoginUserDetails {
 
 interface LoginResponse {
   token: string;
-  user: any;
+  data: any;
   message?: string;
 }
 
 export const logInUser = async (
   userDetails: LoginUserDetails
 ): Promise<LoginResponse> => {
-  const response = await request({
-    url: `/login`,
+  const response = await request2({
+    url: `/admin/login`,
     method: "POST",
     data: userDetails,
   });

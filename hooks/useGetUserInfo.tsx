@@ -13,7 +13,7 @@ function useGetUserInfo() {
   // console.log(loggedInUserDetails, "loggedInUserDetails");
   // const lll = getSessionStorageItem({ key: "user-data" });
   // console.log(lll, "lll");
-  const url = `/single-user?id=${loggedInUserDetails.id}`;
+  const url = `/admin/single-user?id=${loggedInUserDetails.id}`;
   const reqKey = ["users-info"];
   const { useGetRequest } = useApiRequest();
   const { data, error, isLoading, isSuccess } = useGetRequest<UserData>(

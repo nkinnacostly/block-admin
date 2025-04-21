@@ -6,17 +6,31 @@ import { Edit2Icon } from "lucide-react";
 import Link from "next/link";
 
 export interface JournalTrade {
-  id: string;
+  id: number;
   trading_pair: string;
-  trade_type: "buy" | "sell";
-  price: number;
+  trade_type: string;
+  price: string;
   entry_time: string;
-  closing_price: number;
+  closing_price: string;
   closing_time: string;
-  duration: string;
+  trade_duration?: string;
   day_date: string;
-  result: "Profit" | "Loss" | "Breakeven";
-  result_amount: number;
+  result: string;
+  result_amount: string;
+  setup_name: string;
+  note?: string;
+}
+
+export interface EditJournalTrade {
+  trading_pair: string;
+  trade_type: string;
+  price: string;
+  closing_price: string;
+  entry_time: string;
+  closing_time: string;
+  day_date: string;
+  result: string;
+  result_amount: string;
   setup_name: string;
   note?: string;
 }
@@ -35,7 +49,7 @@ export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
           row.original.trade_type === "buy" ? "text-green-600" : "text-red-600"
         }`}
       >
-        {row.original.trade_type.toUpperCase()}
+        {row.original.trade_type}
       </div>
     ),
   },
@@ -45,7 +59,7 @@ export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
     cell: ({ row }) => <div className="font-medium">${row.original.price}</div>,
   },
   {
-    accessorKey: "entryTime",
+    accessorKey: "entry_time",
     header: "Entry Time",
     cell: ({ row }) => (
       <div className="font-medium">
@@ -59,14 +73,14 @@ export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
     ),
   },
   {
-    accessorKey: "closingPrice",
+    accessorKey: "closing_price",
     header: "Closing Price",
     cell: ({ row }) => (
       <div className="font-medium">${row.original.closing_price}</div>
     ),
   },
   {
-    accessorKey: "closingTime",
+    accessorKey: "closing_time",
     header: "Closing Time",
     cell: ({ row }) => (
       <div className="font-medium">
@@ -96,7 +110,7 @@ export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
             : "text-yellow-600"
         }`}
       >
-        {row.original.result.toUpperCase()}
+        {row.original.result}
       </div>
     ),
   },
