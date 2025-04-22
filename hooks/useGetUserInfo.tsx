@@ -1,4 +1,4 @@
-import useApiRequest from "./useCustonApiQuery";
+import useFetchLevel2 from "./useFetchLevel2";
 import { useEffect } from "react";
 import { UserDetails, useUserStore } from "../store/store";
 
@@ -15,8 +15,8 @@ function useGetUserInfo() {
   // console.log(lll, "lll");
   const url = `/admin/single-user?id=${loggedInUserDetails.id}`;
   const reqKey = ["users-info"];
-  const { useGetRequest } = useApiRequest();
-  const { data, error, isLoading, isSuccess } = useGetRequest<UserData>(
+  const { useGetRequest2 } = useFetchLevel2();
+  const { data, error, isLoading, isSuccess } = useGetRequest2<UserData>(
     url,
     reqKey
   );

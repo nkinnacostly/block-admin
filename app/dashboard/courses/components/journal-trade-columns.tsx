@@ -4,6 +4,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Edit2Icon } from "lucide-react";
 import Link from "next/link";
+import { UpdateCopyTraderButton } from "./update-copy-trader-button";
+import { User } from "../../components/user-columns";
 
 export interface JournalTrade {
   id: number;
@@ -33,6 +35,10 @@ export interface EditJournalTrade {
   result_amount: string;
   setup_name: string;
   note?: string;
+}
+
+interface TableMeta {
+  parentData?: User[];
 }
 
 export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
@@ -136,6 +142,24 @@ export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
             </Button>
           </Link>
         </div>
+      );
+    },
+  },
+  {
+    id: "copy_trader",
+    header: "Copy Trader",
+    cell: ({ row, table }) => {
+      const parentData = (table.options.meta as TableMeta)?.parentData;
+      const parentUser = parentData?.find((user: User) =>
+        user.journal_trades.some(
+          (trade: JournalTrade) => trade.id === row.original.id
+        )
+      );
+      return (
+        <UpdateCopyTraderButton
+          trade={row.original}
+          userUuid={parentUser?.uuid || ""}
+        />
       );
     },
   },

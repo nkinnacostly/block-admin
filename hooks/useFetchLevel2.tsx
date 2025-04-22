@@ -25,7 +25,7 @@ function useFetchLevel2() {
   // Generic request function that handles all HTTP methods
   const makeRequest = async <T,>(
     url: string,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     data?: unknown,
     config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse<T>> => {
@@ -79,7 +79,7 @@ function useFetchLevel2() {
         config = {},
       }: {
         url: string;
-        method?: "POST" | "PUT" | "DELETE";
+        method?: "POST" | "PUT" | "DELETE" | "PATCH";
         data?: TData;
         config?: AxiosRequestConfig;
       }) => makeRequest<T>(url, method, data, config),

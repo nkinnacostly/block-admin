@@ -70,8 +70,8 @@ const DashboardSidebar = () => {
         title: "Settings",
         link: "/dashboard/settings",
       },
-    ]
-    // [watchedVideos, isLevel1]
+    ],
+    []
   );
 
   return (

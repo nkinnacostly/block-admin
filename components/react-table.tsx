@@ -19,18 +19,24 @@ import {
 
 import React from "react";
 
-type GenericTableProps<T> = {
-  data: T[];
-  columns: ColumnDef<T, unknown>[];
-};
+interface GenericTableProps<TData> {
+  data: TData[];
+  columns: ColumnDef<TData>[];
+  meta?: Record<string, any>;
+}
 
-const GenericTable = <T,>({ data, columns }: GenericTableProps<T>) => {
+export function GenericTable<TData>({
+  data,
+  columns,
+  meta,
+}: GenericTableProps<TData>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    meta,
   });
 
   return (
@@ -85,6 +91,6 @@ const GenericTable = <T,>({ data, columns }: GenericTableProps<T>) => {
       </Table>
     </div>
   );
-};
+}
 
 export default GenericTable;

@@ -17,6 +17,8 @@ import { EditJournalTradeModal } from "./edit-journal-trade-modal";
 import { Edit2Icon } from "lucide-react";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { useUserStore } from "@/store/store";
+import { UpdateCopyTraderButton } from "./update-copy-trader-button";
+
 interface ApiResponse {
   data: {
     data: {
@@ -41,7 +43,6 @@ function JournalTradeTable() {
 
   const { useMutationRequest2 } = useFetchLevel2();
   const queryClient = useQueryClient();
-  // const { mutate: resetJournal, isPending } = useMutationRequest2();
   const { mutate: updateTrade } = useMutationRequest2();
 
   const handleEditTrade = (trade: JournalTrade) => {
@@ -106,10 +107,28 @@ function JournalTradeTable() {
           ),
         } as ColumnDef<JournalTrade, unknown>;
       }
+      if (col.id === "copy_trader") {
+        return {
+          ...col,
+          cell: ({ row }: { row: Row<JournalTrade> }) => {
+            // Find the parent user object that contains this trade
+            const parentUser = data?.data?.data.data.find((user) =>
+              user.journal_trades.some((trade) => trade.id === row.original.id)
+            );
+
+            return (
+              <UpdateCopyTraderButton
+                trade={row.original}
+                userUuid={parentUser?.uuid || ""}
+              />
+            );
+          },
+        } as ColumnDef<JournalTrade, unknown>;
+      }
       return col;
     });
     return baseColumns;
-  }, []);
+  }, [data?.data?.data.data]);
 
   return (
     <div className="w-full flex flex-col gap-4 items-center justify-center">
@@ -118,7 +137,11 @@ function JournalTradeTable() {
       </div>
       {error && <div className="text-red-500">{error.message}</div>}
       {isLoading && <div className="text-gray-500">Loading...</div>}
-      <GenericTable data={_data} columns={columns} />
+      <GenericTable
+        data={_data}
+        columns={columns}
+        meta={{ parentData: data?.data?.data.data }}
+      />
       {selectedTrade && (
         <EditJournalTradeModal
           isOpen={isEditModalOpen}
