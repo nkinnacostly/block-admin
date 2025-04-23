@@ -59,6 +59,11 @@ const DashboardSidebar = () => {
         title: "Copy Trades",
         link: "/dashboard/copy-trade",
       },
+      {
+        icon: <TbTargetArrow />,
+        title: "Meetings",
+        link: "/dashboard/meetings",
+      },
       // {
       //   icon: <TbTargetArrow />,
       //   title: "Refer and Earn",

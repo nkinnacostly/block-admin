@@ -9,11 +9,11 @@ interface UserData {
 }
 
 function useGetUserInfo() {
-  const { loggedInUserDetails, setLoggedInUserDetails } = useUserStore();
+  const { setLoggedInUserDetails } = useUserStore();
   // console.log(loggedInUserDetails, "loggedInUserDetails");
   // const lll = getSessionStorageItem({ key: "user-data" });
   // console.log(lll, "lll");
-  const url = `/admin/single-user?id=${loggedInUserDetails.id}`;
+  const url = `/admin/get-single-user`;
   const reqKey = ["users-info"];
   const { useGetRequest2 } = useFetchLevel2();
   const { data, error, isLoading, isSuccess } = useGetRequest2<UserData>(
