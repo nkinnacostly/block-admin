@@ -61,6 +61,7 @@ interface JournalTrade {
 }
 
 export const userColumns = (
+  // eslint-disable-next-line no-unused-vars
   onEditClick: (user: User) => void
 ): ColumnDef<User>[] => [
   {
