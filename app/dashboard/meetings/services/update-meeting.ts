@@ -21,6 +21,7 @@ interface UpdateMeetingRequest {
   type: string;
   zoom_meeting_id?: string;
   meeting_url?: string;
+  password?: string;
 }
 
 export function useUpdateMeeting() {

@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/ui/universal-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,7 +66,7 @@ export function AddToTraderArenaModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Trader to Trade Arena</DialogTitle>
+          <DialogTitle>Update Trader Info</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -80,7 +80,7 @@ export function AddToTraderArenaModal({
             />
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Adding..." : "Add to Trader Arena"}
+            {isPending ? "Adding..." : "Submit"}
           </Button>
         </form>
       </DialogContent>

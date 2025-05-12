@@ -10,20 +10,30 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import useApiRequest from "@/hooks/useCustonApiQuery";
 import { useQueryClient } from "@tanstack/react-query";
+import useFetchLevel2 from "@/hooks/useFetchLevel2";
+
 const CreateUserSchema = z.object({
   username: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   notification_status: z.number(),
 });
 
 type CreateUserFormData = z.infer<typeof CreateUserSchema>;
 
+interface CreateUserResponse {
+  message: string;
+  user: CreateUserFormData;
+}
+
+interface CreateUserError {
+  message: string;
+}
+
 export default function CreateUserPage() {
   const router = useRouter();
-  const { useMutationRequest } = useApiRequest();
+  const { useMutationRequest2 } = useFetchLevel2();
   const queryClient = useQueryClient();
 
   const {
@@ -41,30 +51,31 @@ export default function CreateUserPage() {
     },
   });
 
-  const { mutateAsync, isPending } = useMutationRequest();
+  const { mutate: createUser, isPending } =
+    useMutationRequest2<CreateUserResponse>();
 
-  const onSubmit = async (userData: CreateUserFormData) => {
-    try {
-      await mutateAsync(
-        {
-          method: "POST",
-          url: "/admin/add-student",
-          data: userData,
+  const onSubmit = (userData: CreateUserFormData) => {
+    createUser(
+      {
+        method: "POST",
+        url: "/admin/add-student",
+        data: userData,
+      },
+      {
+        onSuccess: () => {
+          toast.success("User created successfully");
+          router.push("/dashboard");
+          queryClient.invalidateQueries({
+            queryKey: ["admin-students"],
+            refetchType: "active",
+            exact: true,
+          });
         },
-        {
-          onSuccess: () => {
-            toast.success("User created successfully");
-            router.push("/dashboard");
-            queryClient.invalidateQueries({ queryKey: ["admin-students"] });
-          },
-          onError: (error: { message: string }) => {
-            toast.error(error.message);
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error creating user:", error);
-    }
+        onError: (error: CreateUserError) => {
+          toast.error(error.message);
+        },
+      }
+    );
   };
 
   return (

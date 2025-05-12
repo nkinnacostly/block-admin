@@ -29,6 +29,6 @@ interface MeetingsResponse {
 export function GetMeetings() {
   const { useGetRequest2 } = useFetchLevel2();
   return useGetRequest2<MeetingsResponse>("/admin/get-all-meetings", [
-    "meetings",
+    "admin-meetings",
   ]);
 }

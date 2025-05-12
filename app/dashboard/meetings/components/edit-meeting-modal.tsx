@@ -3,7 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/ui/universal-dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -37,6 +37,7 @@ const meetingSchema = z.object({
   type: z.enum(["all", "level_3"]),
   zoom_meeting_id: z.string().optional(),
   meeting_url: z.string().url("Please enter a valid URL").optional(),
+  password: z.string(),
 });
 
 type MeetingFormData = z.infer<typeof meetingSchema>;
@@ -78,6 +79,7 @@ export function EditMeetingModal({
           type: data.type,
           zoom_meeting_id: data.zoom_meeting_id,
           meeting_url: data.meeting_url,
+          password: data.password,
         },
         () => {
           toast.success("Meeting updated successfully");
@@ -278,6 +280,20 @@ export function EditMeetingModal({
             {form.formState.errors.meeting_url && (
               <p className="text-sm text-red-500">
                 {form.formState.errors.meeting_url.message}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Meeting Password</Label>
+            <Input
+              id="password"
+              placeholder="Enter meeting password"
+              {...form.register("password")}
+              disabled={isPending}
+            />
+            {form.formState.errors.password && (
+              <p className="text-sm text-red-500">
+                {form.formState.errors.password.message}
               </p>
             )}
           </div>

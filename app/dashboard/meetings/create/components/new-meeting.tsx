@@ -26,8 +26,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useScheduleMeeting } from "../../services/schedule-meeting";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+
+// import { useQueryClient } from "@tanstack/react-query";
 
 const meetingSchema = z.object({
   topic: z.string().min(1, "Topic is required"),
@@ -36,13 +36,13 @@ const meetingSchema = z.object({
   type: z.enum(["all", "level_3"]),
   zoom_meeting_id: z.string().optional(),
   meeting_url: z.string().url("Please enter a valid URL").optional(),
+  password: z.string(),
 });
 
 type MeetingFormData = z.infer<typeof meetingSchema>;
 
 function CreateMeeting() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const { scheduleMeeting, isPending, error } = useScheduleMeeting();
   const form = useForm<MeetingFormData>({
     resolver: zodResolver(meetingSchema),
@@ -53,21 +53,15 @@ function CreateMeeting() {
 
   const onSubmit = async (data: MeetingFormData) => {
     try {
-      scheduleMeeting(
-        {
-          topic: data.topic,
-          start_time: format(data.start_time, "yyyy-MM-dd HH:mm:ss"),
-          end_time: format(data.end_time, "yyyy-MM-dd HH:mm:ss"),
-          type: data.type,
-          zoom_meeting_id: data.zoom_meeting_id,
-          meeting_url: data.meeting_url,
-        },
-        () => {
-          toast.success("Meeting scheduled successfully");
-          queryClient.invalidateQueries({ queryKey: ["meetings"] });
-          router.push("/dashboard/meetings");
-        }
-      );
+      scheduleMeeting({
+        topic: data.topic,
+        start_time: format(data.start_time, "yyyy-MM-dd HH:mm:ss"),
+        end_time: format(data.end_time, "yyyy-MM-dd HH:mm:ss"),
+        type: data.type,
+        zoom_meeting_id: data.zoom_meeting_id,
+        meeting_url: data.meeting_url,
+        password: data.password,
+      });
     } catch (error) {
       toast.error("Failed to schedule meeting");
     }
@@ -267,6 +261,21 @@ function CreateMeeting() {
               {form.formState.errors.meeting_url && (
                 <p className="text-sm text-red-500">
                   {form.formState.errors.meeting_url.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Meet Password</Label>
+              <Input
+                id="password"
+                placeholder="Enter meeting Password"
+                {...form.register("password")}
+                disabled={isPending}
+              />
+              {form.formState.errors.password && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.password.message}
                 </p>
               )}
             </div>
