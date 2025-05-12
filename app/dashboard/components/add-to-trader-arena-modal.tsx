@@ -80,7 +80,7 @@ export function AddToTraderArenaModal({
             />
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Adding..." : "Submit"}
+            {isPending ? "Updating..." : "Submit"}
           </Button>
         </form>
       </DialogContent>
