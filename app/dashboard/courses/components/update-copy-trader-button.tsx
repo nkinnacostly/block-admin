@@ -16,9 +16,9 @@ export function UpdateCopyTraderButton({
   trade,
   userUuid,
 }: UpdateCopyTraderButtonProps) {
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const queryClient = useQueryClient();
-  const { mutate: updateCopyTrader, isPending } = useMutationRequest2();
+  const { mutate: updateCopyTrader, isPending } = useMutationRequest();
 
   const handleUpdateCopyTrader = () => {
     updateCopyTrader(

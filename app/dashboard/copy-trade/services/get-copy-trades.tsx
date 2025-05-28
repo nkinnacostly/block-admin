@@ -1,10 +1,10 @@
 import useFetchLevel2 from "@/hooks/useFetchLevel2";
 
 export const useGetCopyTrades = () => {
-  const { useGetRequest2 } = useFetchLevel2();
+  const { useGet } = useFetchLevel2();
   const url = `/top-traders`;
   const reqKey = ["copy-trades"];
-  const { data, error, isLoading } = useGetRequest2(url, reqKey);
+  const { data, error, isLoading } = useGet(url, reqKey);
 
   return { data, error, isLoading };
 };

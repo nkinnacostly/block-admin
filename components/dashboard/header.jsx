@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/assets/img/png/logo.png";
 import React from "react";
+import { useUserStore } from "@/store/store";
 
 function DashboardHeader() {
+  const { loggedInUserDetails } = useUserStore();
   return (
     <>
       <div className="items-center justify-center hidden w-full h-full p-4 mb-2 lg:flex">
@@ -39,7 +41,9 @@ function DashboardHeader() {
             {/* <Buttonwithbg btnText={"Create account"} /> */}
             <div className="w-20 h-20 border-2 rounded-full">
               <Image
-                src={"/assets/img/png/chef.png"}
+                src={
+                  loggedInUserDetails?.image_url || "/assets/img/png/chef.png"
+                }
                 width={100}
                 height={100}
                 className="w-full h-full rounded-full"

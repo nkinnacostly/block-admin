@@ -26,12 +26,12 @@ export default function UsersInfo() {
   const {
     register,
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, errors },
     reset,
   } = useForm<SettingFormData>({
     resolver: zodResolver(settingSchema),
     defaultValues: {
-      id: loggedInUserDetails?.id,
+      id: loggedInUserDetails?.id ? loggedInUserDetails.id : undefined,
       email: loggedInUserDetails?.email,
     },
   });
@@ -42,9 +42,8 @@ export default function UsersInfo() {
         first_name: loggedInUserDetails.first_name,
         last_name: loggedInUserDetails.last_name,
         phone: loggedInUserDetails.phone,
-        block_path: loggedInUserDetails.block_path,
         email: loggedInUserDetails?.email,
-        id: loggedInUserDetails?.id,
+        id: loggedInUserDetails?.id ? loggedInUserDetails.id : undefined,
       });
     }
   }, [loggedInUserDetails, reset]);
@@ -63,12 +62,13 @@ export default function UsersInfo() {
   };
 
   if (error) return <>{toast.error("Something Went Wrong")}</>;
+  console.log("errors", errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col items-start justify-start w-full lg:w-[534px] p-5 space-y-5 shadow-xl rounded-xl border-2">
         <p className="text-xl font-medium mt-[2rem] text-start">
-          Notification Preferences
+          User Information
         </p>
         <div className="flex items-start flex-col lg:flex-row justify-between w-full p-4 space-y-3 lg:space-y-0 lg:space-x-3 border-b-2">
           <div>
@@ -117,21 +117,6 @@ export default function UsersInfo() {
             placeholder="Phone Number"
             defaultValue={loggedInUserDetails?.phone}
           />
-        </div>
-        <div className="w-full p-4 border-b-2 ">
-          <p>Block Path</p>
-          <Input
-            // name="block_path"
-            {...register("block_path")}
-            // error={errors.block_path}
-            type="text"
-            placeholder="Block Path"
-            defaultValue={loggedInUserDetails?.block_path}
-          />
-        </div>
-        <div className="w-full p-4 border-b-2 ">
-          <p>Block Level</p>
-          <p>{loggedInUserDetails?.learners_level}</p>
         </div>
         <div className="flex items-center justify-center w-full p-4 border-b-2 ">
           <Button disabled={!isDirty || isPending} isLoading={isPending}>

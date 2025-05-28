@@ -52,12 +52,12 @@ function JournalTrades() {
   const { loggedInUserDetails } = useUserStore();
   console.log(loggedInUserDetails, "loggedInUserDetails");
   const [isSetupComplete, setIsSetupComplete] = React.useState(false);
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { mutate: addTraderProfile, isPending } = useMutationRequest2();
+  const { mutate: addTraderProfile, isPending } = useMutationRequest();
   const { mutate: addJournalTrades, isPending: isJournalTradesPending } =
-    useMutationRequest2();
+    useMutationRequest();
   const {
     register: registerSetup,
     handleSubmit: handleSetupSubmit,

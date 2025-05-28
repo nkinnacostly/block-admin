@@ -1,10 +1,12 @@
-import { useMutation, useQuery, QueryKey } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  UseMutationOptions,
+  QueryKey,
+} from "@tanstack/react-query";
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { getSessionStorageItem } from "../utils/storage";
-// import { useUserStore } from "@/store/store";
-// import { toast } from "sonner";
 
-// Define types for API responses and errors
 interface ApiError {
   message: string;
   status: number;
@@ -15,31 +17,34 @@ const axiosInstanceLevel2 = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 10000,
 });
 
-// Custom hook for handling API requests
-function useFetchLevel2() {
-  const token = getSessionStorageItem({ key: "__session" });
-
-  // Generic request function that handles all HTTP methods
+function useApiClientLevel2() {
   const makeRequest = async <T,>(
     url: string,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     data?: unknown,
     config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse<T>> => {
+    const token = getSessionStorageItem({ key: "__session" });
+
+    const mergedConfig: AxiosRequestConfig = {
+      ...config,
+      headers: {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
     try {
       const response = await axiosInstanceLevel2({
         url,
         method,
         data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          ...config.headers,
-        },
-        ...config,
+        ...mergedConfig,
       });
+
       return response;
     } catch (error) {
       const axiosError = error as AxiosError<ApiError>;
@@ -49,10 +54,9 @@ function useFetchLevel2() {
     }
   };
 
-  // Improved GET request hook with better typing
-  const useGetRequest2 = <T,>(
+  const useGet = <T,>(
     url: string,
-    reqKey: QueryKey,
+    queryKey: QueryKey,
     options: {
       enabled?: boolean;
       config?: AxiosRequestConfig;
@@ -61,7 +65,7 @@ function useFetchLevel2() {
     const { enabled = true, config = {} } = options;
 
     return useQuery({
-      queryKey: reqKey,
+      queryKey,
       queryFn: () => makeRequest<T>(url, "GET", undefined, config),
       refetchOnWindowFocus: false,
       refetchOnMount: false,
@@ -69,27 +73,29 @@ function useFetchLevel2() {
     });
   };
 
-  // Enhanced mutation hook supporting all HTTP methods
-  const useMutationRequest2 = <T, TData = unknown>() => {
-    return useMutation({
-      mutationFn: ({
-        url,
-        method = "POST",
-        data,
-        config = {},
-      }: {
+  const useMutationRequest = <T, TData = unknown>(
+    mutationOptions?: UseMutationOptions<
+      AxiosResponse<T>,
+      AxiosError<ApiError>,
+      {
         url: string;
         method?: "POST" | "PUT" | "DELETE" | "PATCH";
         data?: TData;
         config?: AxiosRequestConfig;
-      }) => makeRequest<T>(url, method, data, config),
+      }
+    >
+  ) => {
+    return useMutation({
+      mutationFn: ({ url, method = "POST", data, config = {} }) =>
+        makeRequest<T>(url, method, data, config),
+      ...mutationOptions,
     });
   };
 
   return {
-    useGetRequest2,
-    useMutationRequest2,
+    useGet,
+    useMutationRequest,
   };
 }
 
-export default useFetchLevel2;
+export default useApiClientLevel2;

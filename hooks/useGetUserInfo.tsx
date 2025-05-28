@@ -15,11 +15,8 @@ function useGetUserInfo() {
   // console.log(lll, "lll");
   const url = `/admin/get-single-user`;
   const reqKey = ["users-info"];
-  const { useGetRequest2 } = useFetchLevel2();
-  const { data, error, isLoading, isSuccess } = useGetRequest2<UserData>(
-    url,
-    reqKey
-  );
+  const { useGet } = useFetchLevel2();
+  const { data, error, isLoading, isSuccess } = useGet<UserData>(url, reqKey);
 
   useEffect(() => {
     if (isSuccess && data?.data?.data?.user) {

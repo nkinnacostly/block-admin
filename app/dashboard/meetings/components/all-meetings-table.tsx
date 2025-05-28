@@ -28,8 +28,11 @@ function AllMeetingsTable() {
         </Link>
       </div>
       {error && <div className="text-red-500">{error.message}</div>}
-      {isLoading && <div className="text-gray-500">Loading...</div>}
-      <GenericTable data={tableData} columns={meetingColumns} />
+      {isLoading ? (
+        <div className="text-gray-500">Loading...</div>
+      ) : (
+        <GenericTable data={tableData} columns={meetingColumns} />
+      )}
     </div>
   );
 }

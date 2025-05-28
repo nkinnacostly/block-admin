@@ -32,11 +32,11 @@ interface ApiError {
 }
 
 export function useScheduleMeeting() {
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { mutate, isPending, error } = useMutationRequest2<
+  const { mutate, isPending, error } = useMutationRequest<
     ScheduleMeetingResponse,
     ApiError
   >();

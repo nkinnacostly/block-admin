@@ -11,16 +11,6 @@ function UserLanguage() {
         <p>English</p>
         {/* <ToggleSwitch /> */}
       </div>
-      <div className="flex flex-col items-start justify-start w-full p-4 border-b-2">
-        <p>Time Zone</p>
-        <p>UTC +1:00</p>
-        {/* <ToggleSwitch /> */}
-      </div>
-      <div className="flex flex-col items-start justify-start w-full p-4 border-b-2">
-        <p>Devices</p>
-        <p>Linked Devices and Sessions</p>
-        {/* <ToggleSwitch /> */}
-      </div>
     </div>
   );
 }

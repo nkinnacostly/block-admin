@@ -33,7 +33,7 @@ interface CreateUserError {
 
 export default function CreateUserPage() {
   const router = useRouter();
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const queryClient = useQueryClient();
 
   const {
@@ -52,7 +52,7 @@ export default function CreateUserPage() {
   });
 
   const { mutate: createUser, isPending } =
-    useMutationRequest2<CreateUserResponse>();
+    useMutationRequest<CreateUserResponse>();
 
   const onSubmit = (userData: CreateUserFormData) => {
     createUser(

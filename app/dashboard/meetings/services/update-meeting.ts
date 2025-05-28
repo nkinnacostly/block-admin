@@ -25,12 +25,12 @@ interface UpdateMeetingRequest {
 }
 
 export function useUpdateMeeting() {
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const {
     mutate: updateMeeting,
     isPending,
     error,
-  } = useMutationRequest2<UpdateMeetingResponse, UpdateMeetingError>();
+  } = useMutationRequest<UpdateMeetingResponse, UpdateMeetingError>();
 
   const handleUpdateMeeting = (
     meetingId: number,

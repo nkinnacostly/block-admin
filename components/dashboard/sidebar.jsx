@@ -10,6 +10,7 @@ import { MdDashboard } from "react-icons/md";
 import React, { memo, useMemo } from "react";
 import { TbTargetArrow } from "react-icons/tb";
 import { usePathname } from "next/navigation";
+import { useUserStore } from "@/store/store";
 // import { useUserStore } from "@/store/store";
 // import { useVideoStore } from "@/store/store";
 
@@ -31,7 +32,7 @@ const SidebarLink = memo(({ icon, title, link, isActive, disabled }) => (
 SidebarLink.displayName = "SidebarLink";
 
 const DashboardSidebar = () => {
-  // const { loggedInUserDetails } = useUserStore();
+  const { loggedInUserDetails } = useUserStore();
   // const { watchedVideos } = useVideoStore();
   // const router = useRouter();
   // const isLevel1 = loggedInUserDetails?.learners_level === "1";
@@ -84,7 +85,7 @@ const DashboardSidebar = () => {
       <div className="flex items-center justify-center">
         <div className="relative w-20 h-20 border-2 rounded-full overflow-hidden">
           <Image
-            src="/assets/img/png/chef.png"
+            src={loggedInUserDetails?.image_url || "/assets/img/png/chef.png"}
             fill
             className="object-cover"
             alt="Profile"

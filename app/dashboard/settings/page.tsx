@@ -1,5 +1,5 @@
 import React from "react";
-import UserAccesibility from "./components/user-accesibility";
+// import UserAccesibility from "./components/user-accesibility";
 import UserAccountStatus from "./components/user-account-status";
 import UserFeedBack from "./components/user-feedback";
 import UserLanguage from "./components/user-language";
@@ -19,7 +19,7 @@ const Settings: React.FC = () => {
       </div>
       <div className="flex flex-col items-start justify-start space-y-5">
         <UsersInfo />
-        <UserAccesibility />
+        {/* <UserAccesibility /> */}
         <UserFeedBack />
         <UserAccountStatus />
       </div>

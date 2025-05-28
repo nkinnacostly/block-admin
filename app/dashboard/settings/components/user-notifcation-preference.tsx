@@ -63,7 +63,7 @@ function UserNotificationPreference() {
         },
         {
           onSuccess: (data: any) => {
-            console.log(data);
+            // console.log(data);
             toast.error(data.message);
             queryClient.refetchQueries({
               queryKey: ["users-info"],
@@ -71,7 +71,7 @@ function UserNotificationPreference() {
           },
           onError: (error: any) => {
             toast.error(error.message);
-            console.log(error, "This is error");
+            // console.log(error, "This is error");
           },
         }
       );

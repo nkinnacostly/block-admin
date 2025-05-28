@@ -41,9 +41,9 @@ function JournalTradeTable() {
   const tableData = data?.data?.data.data.map((item) => item.journal_trades);
   const _data = React.useMemo(() => tableData?.flat() ?? [], [tableData]);
 
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const queryClient = useQueryClient();
-  const { mutate: updateTrade } = useMutationRequest2();
+  const { mutate: updateTrade } = useMutationRequest();
 
   const handleEditTrade = (trade: JournalTrade) => {
     setSelectedTrade(trade);

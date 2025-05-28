@@ -33,9 +33,9 @@ function TradeProfileTable() {
   };
   const _data = React.useMemo(() => data?.data?.data.data ?? [], [data]);
 
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const queryClient = useQueryClient();
-  const { mutate: updateProfile } = useMutationRequest2();
+  const { mutate: updateProfile } = useMutationRequest();
 
   const handleEditProfile = (profile: User) => {
     setSelectedProfile(profile);

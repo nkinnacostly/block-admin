@@ -1,9 +1,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Edit2Icon } from "lucide-react";
 import { TraderProfile } from "../courses/types";
+import Link from "next/link";
 
 export interface User {
   id: number;
@@ -132,13 +133,16 @@ export const userColumns = (
     cell: ({ row }) => {
       return (
         <div className="flex items-center space-x-2">
-          <Button
+          <Link href={`/dashboard/${row.original.uuid}`}>
+            <Edit2Icon className="h-4 w-4" />
+          </Link>
+          {/* <Button
             variant="ghost"
             size="icon"
             onClick={() => onEditClick(row.original)}
           >
-            <Edit2Icon className="h-4 w-4" />
-          </Button>
+          </Button> */}
+          {/* <Edit2Icon className="h-4 w-4" /> */}
         </div>
       );
     },

@@ -37,10 +37,9 @@ export interface Meeting {
 function MeetingActions({ meeting }: { meeting: Meeting }) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { useMutationRequest2 } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
 
-  const { mutate: deleteMeeting, isPending: isDeleting } =
-    useMutationRequest2();
+  const { mutate: deleteMeeting, isPending: isDeleting } = useMutationRequest();
 
   const handleDelete = () => {
     deleteMeeting(
