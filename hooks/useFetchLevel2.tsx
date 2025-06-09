@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-query";
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { getSessionStorageItem } from "../utils/storage";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 interface ApiError {
   message: string;
@@ -21,6 +23,16 @@ const axiosInstanceLevel2 = axios.create({
 });
 
 function useApiClientLevel2() {
+  const router = useRouter();
+
+  const handleUnauthorized = () => {
+    // Clear session data
+    Cookies.remove("__session");
+    sessionStorage.removeItem("__session");
+    // Redirect to login
+    router.push("/login");
+  };
+
   const makeRequest = async <T,>(
     url: string,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
@@ -48,6 +60,12 @@ function useApiClientLevel2() {
       return response;
     } catch (error) {
       const axiosError = error as AxiosError<ApiError>;
+
+      // Handle 401 Unauthorized error
+      if (axiosError.response?.status === 401) {
+        handleUnauthorized();
+      }
+
       const errorMessage =
         axiosError.response?.data?.message || axiosError.message;
       throw new Error(`Request failed: ${errorMessage}`);
