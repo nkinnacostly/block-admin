@@ -39,7 +39,7 @@ export default function TopTraders() {
       status: "APPROVED" | "DECLINE";
     }) => {
       const response = await request2({
-        url: `/admin/update-pending-trade/?user_id=${data.userId}`,
+        url: `/admin/update-pending-trade?user_id=${data.userId}`,
         method: "PATCH",
         data: {
           trade_status: data.status,
