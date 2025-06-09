@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useGetSingleStudentProfile } from "../services/get-single-students-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,16 +8,18 @@ import { User } from "./user-columns";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { AddToTraderArenaModal } from "./add-to-trader-arena-modal";
 
 interface userResponse {
   message: string;
-  user: User;
+  data: User;
 }
 
 function StudentProfileComponent({ id }: { id: string }) {
   const { data, isLoading, isFetching } = useGetSingleStudentProfile(id);
   const userData = data?.data as userResponse | undefined;
-  console.log(userData);
+  const [open, setOpen] = useState(false);
 
   if (isLoading || isFetching) {
     return (
@@ -34,6 +36,14 @@ function StudentProfileComponent({ id }: { id: string }) {
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-end">
+        <Button onClick={() => setOpen(true)}>Upgrade User</Button>
+        <AddToTraderArenaModal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          user={userData?.data}
+        />
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Student Profile</CardTitle>
@@ -45,37 +55,37 @@ function StudentProfileComponent({ id }: { id: string }) {
               <h3 className="text-sm font-medium text-muted-foreground">
                 First Name
               </h3>
-              <Input defaultValue={userData?.user.first_name} />
+              <Input defaultValue={userData?.data.first_name} />
             </div>
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
                 Last Name
               </h3>
-              <Input defaultValue={userData?.user.last_name} />
+              <Input defaultValue={userData?.data.last_name} />
             </div>
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
                 User Name
               </h3>
-              <Input defaultValue={userData?.user.username} />
+              <Input defaultValue={userData?.data.username} />
             </div>
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
                 User Status
               </h3>
-              <Input defaultValue={userData?.user.user_status} />
+              <Input defaultValue={userData?.data.user_status} />
             </div>
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
                 Email
               </h3>
-              <Input defaultValue={userData?.user.email} />
+              <Input defaultValue={userData?.data.email} />
             </div>
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
                 Phone
               </h3>
-              <Input defaultValue={userData?.user.phone} />
+              <Input defaultValue={userData?.data.phone} />
             </div>
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
@@ -83,12 +93,12 @@ function StudentProfileComponent({ id }: { id: string }) {
               </h3>
               <Badge
                 variant={
-                  userData?.user.user_status === "active"
+                  userData?.data.user_status === "active"
                     ? "success"
                     : "secondary"
                 }
               >
-                {userData?.user.user_status}
+                {userData?.data.user_status}
               </Badge>
             </div>
           </div>

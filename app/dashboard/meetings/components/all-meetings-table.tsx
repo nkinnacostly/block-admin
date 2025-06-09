@@ -9,7 +9,6 @@ import { buttonVariants } from "@/components/ui/button";
 
 function AllMeetingsTable() {
   const { data, error, isLoading } = GetMeetings();
-  console.log(data, "MEETINGS");
 
   const tableData = React.useMemo(
     () => data?.data?.meetings.data ?? [],
