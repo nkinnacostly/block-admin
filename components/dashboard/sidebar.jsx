@@ -6,7 +6,7 @@ import Image from "next/image";
 import { IoMdSettings } from "react-icons/io";
 // import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdOutlineMeetingRoom } from "react-icons/md";
 import React, { memo, useMemo } from "react";
 import { TbTargetArrow } from "react-icons/tb";
 import { usePathname } from "next/navigation";
@@ -61,9 +61,14 @@ const DashboardSidebar = () => {
         link: "/dashboard/copy-trade",
       },
       {
-        icon: <TbTargetArrow />,
+        icon: <MdOutlineMeetingRoom />,
         title: "Meetings",
         link: "/dashboard/meetings",
+      },
+      {
+        icon: <TbTargetArrow />,
+        title: "Journal Requests",
+        link: "/dashboard/journal-request",
       },
       // {
       //   icon: <TbTargetArrow />,
