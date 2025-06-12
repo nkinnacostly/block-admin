@@ -39,14 +39,15 @@ function TradeProfileTable() {
     setSelectedProfile(profile);
     setIsEditModalOpen(true);
   };
-
+  console.log(selectedProfile, "selectedProfile");
   const handleSaveProfile = async (updatedProfile: EditTradeProfile) => {
     setIsEditLoading(true);
+    const { id, ...profileData } = updatedProfile;
     updateProfile(
       {
         method: "PUT",
-        url: `/admin/update-trade-profile/${updatedProfile.id}`,
-        data: updatedProfile,
+        url: `/admin/update-profile-trades/${id}`,
+        data: profileData,
       },
       {
         onSuccess: () => {

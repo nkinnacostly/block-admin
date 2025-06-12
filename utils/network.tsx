@@ -38,7 +38,8 @@ export const request2 = async <T,>(options: RequestOptions): Promise<T> => {
   };
 
   const onError = (error: any): Promise<never> => {
-    return Promise.reject(error.response?.data);
+    console.log(error, "error");
+    return error.response?.data;
   };
 
   return client2(options).then(onSuccess).catch(onError);

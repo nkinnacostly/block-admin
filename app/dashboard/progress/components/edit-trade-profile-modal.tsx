@@ -33,7 +33,7 @@ export function EditTradeProfileModal({
     login: profile.trader_profile.login,
     investor_password: profile.trader_profile.investor_password,
     server_name: profile.trader_profile.server_name,
-    id: profile.id,
+    id: profile.trader_profile.id,
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

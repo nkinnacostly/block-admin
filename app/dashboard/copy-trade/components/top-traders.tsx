@@ -5,15 +5,17 @@ import { Separator } from "@/components/ui/separator";
 
 import { AxiosResponse } from "axios";
 import { useGetCopyTrades } from "../services/get-copy-trades";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { request2 } from "@/utils/network";
+import { toast } from "sonner";
 
 interface Trader {
   user_id: string;
-  starting_equity: string;
+  equity: string;
   weekly_profit: number;
-  profit_gain: number;
+  one_week_gain: number;
   percentage_gain: string;
+  user_name: string;
   equity_growth: number;
 }
 
@@ -22,10 +24,17 @@ interface TopTradersResponse {
   data: Trader[];
 }
 
+interface UpdateTradeResponse {
+  message: string;
+  status: string | number;
+}
+
 export default function TopTraders() {
   const { data, error, isLoading } = useGetCopyTrades();
+  const queryClient = useQueryClient();
   const response = data as AxiosResponse<TopTradersResponse> | undefined;
   const traders = response?.data?.data;
+  console.log(traders);
   const [approveLoading, setApproveLoading] = React.useState<
     Record<string, boolean>
   >({});
@@ -38,14 +47,24 @@ export default function TopTraders() {
       userId: string;
       status: "APPROVED" | "DECLINE";
     }) => {
-      const response = await request2({
+      const response = await request2<UpdateTradeResponse>({
         url: `/admin/update-pending-trade?user_id=${data.userId}`,
         method: "PATCH",
         data: {
           trade_status: data.status,
         },
       });
-
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response.message);
+        queryClient.invalidateQueries({
+          queryKey: ["copy-trades-pending"],
+        });
+      } else {
+        toast.error(response.message);
+        queryClient.invalidateQueries({
+          queryKey: ["copy-trades-pending"],
+        });
+      }
       return response;
     },
   });
@@ -87,7 +106,7 @@ export default function TopTraders() {
             <Card key={trader.user_id} className="p-4">
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold">{trader.user_id}</h3>
+                  <h3 className="text-lg font-semibold">{trader.user_name}</h3>
                   <span className="text-sm text-muted-foreground">
                     Level {trader.weekly_profit}
                   </span>
@@ -95,21 +114,19 @@ export default function TopTraders() {
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Equity</p>
-                    <p className="text-lg font-medium">
-                      ${trader.starting_equity}
-                    </p>
+                    <p className="text-lg font-medium">${trader.equity}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">1 Week Gain</p>
                     <p className="text-lg font-medium ">
-                      +${trader.profit_gain}
+                      +${trader.one_week_gain}
                     </p>
                   </div>
                 </div>
                 <div className="mt-2">
                   <p className="text-sm text-muted-foreground">Performance</p>
                   <p className="text-lg font-medium ">
-                    +{trader.percentage_gain}
+                    +{trader.equity_growth}
                   </p>
                 </div>
                 <div className="flex gap-2 mt-4">
