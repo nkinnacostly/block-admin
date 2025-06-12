@@ -21,6 +21,7 @@ export interface JournalTrade {
   result_amount: string;
   setup_name: string;
   note?: string;
+  username: string;
 }
 
 export interface EditJournalTrade {
@@ -42,6 +43,10 @@ export interface EditJournalTrade {
 // }
 
 export const journalTradeColumns: ColumnDef<JournalTrade>[] = [
+  {
+    accessorKey: "username",
+    header: "Username",
+  },
   {
     accessorKey: "trading_pair",
     header: "Trading Pair/Asset",

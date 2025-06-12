@@ -47,6 +47,7 @@ export interface EditTradeProfile {
   login: string;
   investor_password: string;
   server_name: string;
+  id: number;
 }
 
 interface JournalTrade {
@@ -72,31 +73,31 @@ interface JournalTrade {
 
 export const tradeColumns: ColumnDef<User>[] = [
   {
-    accessorKey: "starting_equity",
+    accessorKey: "trader_profile.starting_equity",
     header: "Starting Equity",
   },
   {
-    accessorKey: "broker",
+    accessorKey: "trader_profile.broker",
     header: "Broker",
   },
   {
-    accessorKey: "login",
+    accessorKey: "trader_profile.login",
     header: "Login",
   },
   {
-    accessorKey: "investor_password",
+    accessorKey: "trader_profile.investor_password",
     header: "Investor Password",
   },
   {
-    accessorKey: "server_name",
+    accessorKey: "trader_profile.server_name",
     header: "Server Name",
   },
   {
-    accessorKey: "is_reset",
+    accessorKey: "trader_profile.is_reset",
     header: "Is Reset",
     cell: ({ row }) => (
       <div className="font-medium">
-        {row.original.trader_profile.is_reset ? "Yes" : "No"}
+        {row.original.trader_profile.is_reset === 1 ? "Yes" : "No"}
       </div>
     ),
   },
@@ -107,5 +108,9 @@ export const tradeColumns: ColumnDef<User>[] = [
   {
     accessorKey: "block_level",
     header: "Block Level",
+  },
+  {
+    id: "actions",
+    cell: () => null,
   },
 ];

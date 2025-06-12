@@ -85,8 +85,9 @@ function useApiClientLevel2() {
     return useQuery({
       queryKey,
       queryFn: () => makeRequest<T>(url, "GET", undefined, config),
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      // refetchInterval: 1000,
       enabled,
     });
   };

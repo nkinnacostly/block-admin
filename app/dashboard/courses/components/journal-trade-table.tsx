@@ -39,7 +39,17 @@ function JournalTradeTable() {
   };
 
   const tableData = data?.data?.data.data.map((item) => item.journal_trades);
-  const _data = React.useMemo(() => tableData?.flat() ?? [], [tableData]);
+  const _data = React.useMemo(
+    () =>
+      tableData?.flat().map((trade) => ({
+        ...trade,
+        username:
+          data?.data?.data.data.find((user) =>
+            user.journal_trades.some((t) => t.id === trade.id)
+          )?.username || "",
+      })) ?? [],
+    [tableData, data?.data?.data.data]
+  );
 
   const { useMutationRequest } = useFetchLevel2();
   const queryClient = useQueryClient();

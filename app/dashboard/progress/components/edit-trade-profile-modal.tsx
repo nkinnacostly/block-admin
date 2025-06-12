@@ -28,11 +28,12 @@ export function EditTradeProfileModal({
   isLoading,
 }: EditTradeProfileModalProps) {
   const [formData, setFormData] = React.useState<EditTradeProfile>({
-    starting_equity: profile.starting_equity,
-    broker: profile.broker,
-    login: profile.login,
-    investor_password: profile.investor_password,
-    server_name: profile.server_name,
+    starting_equity: Number(profile.trader_profile.starting_equity),
+    broker: profile.trader_profile.broker,
+    login: profile.trader_profile.login,
+    investor_password: profile.trader_profile.investor_password,
+    server_name: profile.trader_profile.server_name,
+    id: profile.id,
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,6 +48,13 @@ export function EditTradeProfileModal({
           <DialogTitle>Edit Trade Profile</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="id"
+            id="id"
+            value={formData.id}
+            className="hidden"
+          />
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Starting Equity</Label>

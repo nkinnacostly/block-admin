@@ -10,7 +10,6 @@ import { ColumnDef, Row } from "@tanstack/react-table";
 import useFetchLevel2 from "@/hooks/useFetchLevel2";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUserStore } from "@/store/store";
 
 interface ApiResponse {
   data: {
@@ -24,9 +23,8 @@ function TradeProfileTable() {
   const [selectedProfile, setSelectedProfile] = useState<User | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditLoading, setIsEditLoading] = useState(false);
-  const { loggedInUserDetails } = useUserStore();
 
-  const { data } = useGetAllProfileTrades() as {
+  const { data, isLoading, error } = useGetAllProfileTrades() as {
     data: ApiResponse | undefined;
     error: any;
     isLoading: boolean;
@@ -47,7 +45,7 @@ function TradeProfileTable() {
     updateProfile(
       {
         method: "PUT",
-        url: `/admin/update-trade-profile/${loggedInUserDetails?.id}`,
+        url: `/admin/update-trade-profile/${updatedProfile.id}`,
         data: updatedProfile,
       },
       {
@@ -95,7 +93,12 @@ function TradeProfileTable() {
       <div className="w-full flex items-center justify-between">
         <h1 className="text-xl font-normal"> All Trade Profile</h1>
       </div>
-      <GenericTable data={_data} columns={columns} />
+      {error && <div className="text-red-500">{error.message}</div>}
+      {isLoading ? (
+        <div className="text-gray-500">Loading...</div>
+      ) : (
+        <GenericTable data={_data} columns={columns} />
+      )}
       {selectedProfile && (
         <EditTradeProfileModal
           isOpen={isEditModalOpen}
