@@ -33,7 +33,7 @@ const meetingSchema = z.object({
   topic: z.string().min(1, "Topic is required"),
   start_time: z.date(),
   end_time: z.date(),
-  type: z.enum(["all", "level_3"]),
+  type: z.enum(["all", "level_3", "traders"]),
   zoom_meeting_id: z.string().optional(),
   meeting_url: z.string().url("Please enter a valid URL").optional(),
   password: z.string(),
@@ -233,9 +233,10 @@ function CreateMeeting() {
                   <SelectValue placeholder="Select meeting type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">All Students</SelectItem>
 
-                  <SelectItem value="level_3">All Level 3 Studentse</SelectItem>
+                  <SelectItem value="level_3">All Level 3 Students</SelectItem>
+                  <SelectItem value="traders">All Traders</SelectItem>
                 </SelectContent>
               </Select>
             </div>
