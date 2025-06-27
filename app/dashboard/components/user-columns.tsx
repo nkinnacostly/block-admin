@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon } from "lucide-react";
 import { TraderProfile } from "../courses/types";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export interface User {
   id: number;
@@ -130,18 +131,18 @@ export const userColumns = (
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       return (
         <div className="flex items-center space-x-2">
           <Link href={`/dashboard/${row.original.uuid}`}>
             <Edit2Icon className="h-4 w-4" />
           </Link>
-          {/* <Button
+          <Button
             variant="ghost"
             size="icon"
             onClick={() => onEditClick(row.original)}
-          >
-          </Button> */}
+          ></Button>
           {/* <Edit2Icon className="h-4 w-4" /> */}
         </div>
       );

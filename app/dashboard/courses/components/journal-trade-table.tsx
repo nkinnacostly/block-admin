@@ -106,6 +106,7 @@ function JournalTradeTable() {
         return {
           accessorKey: "id",
           id: "actions",
+          header: "Actions",
           cell: ({ row }: { row: Row<JournalTrade> }) => (
             <Button
               variant="ghost"

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "next dev -H 127.0.0.1 -p 7000",
+    "dev": "next dev -H 127.0.0.1 -p 8000",
     "build": "next build",
     "start": "next start",
     "proxy": "http://localhost:5000",
