@@ -34,18 +34,21 @@ export default function TopTraders() {
   const queryClient = useQueryClient();
   const response = data as AxiosResponse<TopTradersResponse> | undefined;
   const traders = response?.data?.data;
-  console.log(traders);
+
   const [approveLoading, setApproveLoading] = React.useState<
     Record<string, boolean>
   >({});
   const [declineLoading, setDeclineLoading] = React.useState<
     Record<string, boolean>
   >({});
+  const [pendingLoading, setPendingLoading] = React.useState<
+    Record<string, boolean>
+  >({});
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: {
       userId: string;
-      status: "APPROVED" | "DECLINE";
+      status: "APPROVED" | "DECLINE" | "PENDING";
     }) => {
       const response = await request2<UpdateTradeResponse>({
         url: `/admin/update-pending-trade?user_id=${data.userId}`,
@@ -71,12 +74,14 @@ export default function TopTraders() {
 
   const handleUpdateStatus = async (
     userId: string,
-    status: "APPROVED" | "DECLINE"
+    status: "APPROVED" | "DECLINE" | "PENDING"
   ) => {
     if (status === "APPROVED") {
       setApproveLoading((prev) => ({ ...prev, [userId]: true }));
-    } else {
+    } else if (status === "DECLINE") {
       setDeclineLoading((prev) => ({ ...prev, [userId]: true }));
+    } else if (status === "PENDING") {
+      setPendingLoading((prev) => ({ ...prev, [userId]: true }));
     }
 
     try {
@@ -84,8 +89,10 @@ export default function TopTraders() {
     } finally {
       if (status === "APPROVED") {
         setApproveLoading((prev) => ({ ...prev, [userId]: false }));
-      } else {
+      } else if (status === "DECLINE") {
         setDeclineLoading((prev) => ({ ...prev, [userId]: false }));
+      } else if (status === "PENDING") {
+        setPendingLoading((prev) => ({ ...prev, [userId]: false }));
       }
     }
   };
@@ -147,6 +154,15 @@ export default function TopTraders() {
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                   >
                     {declineLoading[trader.user_id] ? "Loading..." : "Decline"}
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleUpdateStatus(trader.user_id, "PENDING")
+                    }
+                    disabled={pendingLoading[trader.user_id]}
+                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                  >
+                    {pendingLoading[trader.user_id] ? "Loading..." : "Remove"}
                   </button>
                 </div>
               </div>

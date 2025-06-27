@@ -4,6 +4,7 @@ import React from "react";
 import { useGetAllPendingResetRequest } from "../services/get-all-pending-request";
 import { useApproveRequest } from "../services/approve-request";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 interface ResetRequest {
   id: number;
@@ -39,7 +40,6 @@ function AllRestJournalRequest() {
       approveRefetch();
     }
     if (isSuccess) {
-      refetch();
       toast.success("Request approved successfully");
       setApproveId(undefined);
     }
@@ -49,16 +49,16 @@ function AllRestJournalRequest() {
     setApproveId(id.toString());
   };
 
-  // const handleDecline = async (id: number) => {
-  //   try {
-  //     await axios.post(
-  //       `https://block-traders.com.blocktraders.academy/api/admin/decline-reset-profile/${id}`
-  //     );
-  //     refetch(); // Refresh the list
-  //   } catch (error) {
-  //     console.error("Error declining request:", error);
-  //   }
-  // };
+  const handleDecline = async (id: number) => {
+    try {
+      await axios.post(
+        `https://block-traders.com.blocktraders.academy/api/admin/decline-reset-profile/${id}`
+      );
+      refetch(); // Refresh the list
+    } catch (error) {
+      console.error("Error declining request:", error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -138,12 +138,12 @@ function AllRestJournalRequest() {
                     >
                       Approve
                     </button>
-                    {/* <button
+                    <button
                       onClick={() => handleDecline(request.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Decline
-                    </button> */}
+                    </button>
                   </td>
                 </tr>
               ))}
