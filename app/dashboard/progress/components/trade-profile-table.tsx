@@ -39,7 +39,7 @@ function TradeProfileTable() {
     setSelectedProfile(profile);
     setIsEditModalOpen(true);
   };
-  console.log(selectedProfile, "selectedProfile");
+
   const handleSaveProfile = async (updatedProfile: EditTradeProfile) => {
     setIsEditLoading(true);
     const { id, ...profileData } = updatedProfile;

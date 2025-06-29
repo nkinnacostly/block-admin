@@ -73,6 +73,10 @@ interface JournalTrade {
 
 export const tradeColumns: ColumnDef<User>[] = [
   {
+    accessorKey: "username",
+    header: "Username",
+  },
+  {
     accessorKey: "trader_profile.starting_equity",
     header: "Starting Equity",
   },
