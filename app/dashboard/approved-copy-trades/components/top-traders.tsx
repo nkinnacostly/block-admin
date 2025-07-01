@@ -55,12 +55,12 @@ export default function TopTraders() {
       if (response.status === 200 || response.status === 201) {
         toast.success(response.message);
         queryClient.invalidateQueries({
-          queryKey: ["copy-trades-pending"],
+          queryKey: ["copy-trades-approved"],
         });
       } else {
         toast.error(response.message);
         queryClient.invalidateQueries({
-          queryKey: ["copy-trades-pending"],
+          queryKey: ["copy-trades-approved"],
         });
       }
       return response;
