@@ -17,6 +17,7 @@ interface Trader {
   percentage_gain: string;
   user_name: string;
   equity_growth: number;
+  status: string | number;
 }
 
 interface TopTradersResponse {
@@ -141,7 +142,11 @@ export default function TopTraders() {
                     onClick={() =>
                       handleUpdateStatus(trader.user_id, "APPROVED")
                     }
-                    disabled={approveLoading[trader.user_id]}
+                    disabled={
+                      approveLoading[trader.user_id] ||
+                      trader.status === 1 ||
+                      trader.status === "1"
+                    }
                     className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                   >
                     {approveLoading[trader.user_id] ? "Loading..." : "Approve"}
@@ -150,7 +155,11 @@ export default function TopTraders() {
                     onClick={() =>
                       handleUpdateStatus(trader.user_id, "DECLINE")
                     }
-                    disabled={declineLoading[trader.user_id]}
+                    disabled={
+                      declineLoading[trader.user_id] ||
+                      trader.status === 1 ||
+                      trader.status === "1"
+                    }
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                   >
                     {declineLoading[trader.user_id] ? "Loading..." : "Decline"}
@@ -159,7 +168,11 @@ export default function TopTraders() {
                     onClick={() =>
                       handleUpdateStatus(trader.user_id, "PENDING")
                     }
-                    disabled={pendingLoading[trader.user_id]}
+                    disabled={
+                      pendingLoading[trader.user_id] ||
+                      trader.status === 0 ||
+                      trader.status === "0"
+                    }
                     className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                   >
                     {pendingLoading[trader.user_id] ? "Loading..." : "Remove"}
