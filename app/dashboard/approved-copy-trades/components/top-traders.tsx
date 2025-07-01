@@ -36,17 +36,14 @@ export default function TopTraders() {
   const response = data as AxiosResponse<TopTradersResponse> | undefined;
   const traders = response?.data?.data;
 
-  const [approveLoading, setApproveLoading] = React.useState<
-    Record<string, boolean>
-  >({});
-  const [declineLoading, setDeclineLoading] = React.useState<
+  const [pendingLoading, setPendingLoading] = React.useState<
     Record<string, boolean>
   >({});
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: {
       userId: string;
-      status: "APPROVED" | "PENDING";
+      status: "APPROVED" | "DECLINE" | "PENDING";
     }) => {
       const response = await request2<UpdateTradeResponse>({
         url: `/admin/update-pending-trade?user_id=${data.userId}`,
@@ -72,22 +69,12 @@ export default function TopTraders() {
 
   const handleUpdateStatus = async (
     userId: string,
-    status: "APPROVED" | "PENDING"
+    status: "APPROVED" | "DECLINE" | "PENDING"
   ) => {
-    if (status === "APPROVED") {
-      setApproveLoading((prev) => ({ ...prev, [userId]: true }));
-    } else if (status === "PENDING") {
-      setDeclineLoading((prev) => ({ ...prev, [userId]: true }));
-    }
-
     try {
       await mutateAsync({ userId, status });
     } finally {
-      if (status === "APPROVED") {
-        setApproveLoading((prev) => ({ ...prev, [userId]: false }));
-      } else if (status === "PENDING") {
-        setDeclineLoading((prev) => ({ ...prev, [userId]: false }));
-      }
+      setPendingLoading((prev) => ({ ...prev, [userId]: false }));
     }
   };
 
@@ -98,7 +85,7 @@ export default function TopTraders() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Pending Copy Traders</CardTitle>
+        <CardTitle>Approved Copy Traders</CardTitle>
       </CardHeader>
       <Separator />
       <CardContent className="mt-3 p-6">
@@ -133,29 +120,16 @@ export default function TopTraders() {
                 <div className="flex gap-2 mt-4">
                   <button
                     onClick={() =>
-                      handleUpdateStatus(trader.user_id, "APPROVED")
-                    }
-                    disabled={
-                      approveLoading[trader.user_id] ||
-                      trader.status === 1 ||
-                      trader.status === "1"
-                    }
-                    className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                  >
-                    {approveLoading[trader.user_id] ? "Loading..." : "Approve"}
-                  </button>
-                  <button
-                    onClick={() =>
                       handleUpdateStatus(trader.user_id, "PENDING")
                     }
                     disabled={
-                      declineLoading[trader.user_id] ||
-                      trader.status === 1 ||
-                      trader.status === "1"
+                      pendingLoading[trader.user_id] ||
+                      trader.status === 0 ||
+                      trader.status === "0"
                     }
-                    className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                   >
-                    {declineLoading[trader.user_id] ? "Loading..." : "Decline"}
+                    {pendingLoading[trader.user_id] ? "Loading..." : "Remove"}
                   </button>
                 </div>
               </div>

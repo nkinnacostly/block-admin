@@ -9,6 +9,7 @@ import Link from "next/link";
 import { MdDashboard, MdOutlineMeetingRoom } from "react-icons/md";
 import React, { memo, useMemo } from "react";
 import { TbTargetArrow } from "react-icons/tb";
+import { TbCheck } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useUserStore } from "@/store/store";
 // import { useUserStore } from "@/store/store";
@@ -59,6 +60,11 @@ const DashboardSidebar = () => {
         icon: <TbTargetArrow />,
         title: "Copy Trades",
         link: "/dashboard/copy-trade",
+      },
+      {
+        icon: <TbCheck />,
+        title: "Approved Copy Trades",
+        link: "/dashboard/approved-copy-trades",
       },
       {
         icon: <MdOutlineMeetingRoom />,
