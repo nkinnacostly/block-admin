@@ -41,10 +41,7 @@ export default function TopTraders() {
   >({});
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: {
-      userId: string;
-      status: "APPROVED" | "DECLINE" | "PENDING";
-    }) => {
+    mutationFn: async (data: { userId: string; status: "PENDING" }) => {
       const response = await request2<UpdateTradeResponse>({
         url: `/admin/update-pending-trade?user_id=${data.userId}`,
         method: "PATCH",
@@ -67,13 +64,13 @@ export default function TopTraders() {
     },
   });
 
-  const handleUpdateStatus = async (
-    userId: string,
-    status: "APPROVED" | "DECLINE" | "PENDING"
-  ) => {
+  const handleUpdateStatus = async (userId: string, status: "PENDING") => {
     try {
+      console.log("Setting loading for user:", userId, "to true");
+      setPendingLoading((prev) => ({ ...prev, [userId]: true }));
       await mutateAsync({ userId, status });
     } finally {
+      console.log("Setting loading for user:", userId, "to false");
       setPendingLoading((prev) => ({ ...prev, [userId]: false }));
     }
   };
@@ -81,6 +78,8 @@ export default function TopTraders() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
   if (!traders?.length) return <div>No traders found</div>;
+
+  console.log("Current pendingLoading state:", pendingLoading);
 
   return (
     <Card className="w-full">
@@ -122,14 +121,10 @@ export default function TopTraders() {
                     onClick={() =>
                       handleUpdateStatus(trader.user_id, "PENDING")
                     }
-                    disabled={
-                      pendingLoading[trader.user_id] ||
-                      trader.status === 0 ||
-                      trader.status === "0"
-                    }
-                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                    disabled={!!pendingLoading[trader.user_id]}
+                    className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                   >
-                    {pendingLoading[trader.user_id] ? "Loading..." : "Remove"}
+                    {pendingLoading[trader.user_id] ? "Removing..." : "Remove"}
                   </button>
                 </div>
               </div>
