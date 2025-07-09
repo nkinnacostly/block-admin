@@ -91,7 +91,7 @@ export const userColumns = (
   },
   {
     accessorKey: "block_path",
-    header: "Block Path",
+    header: "Block Trader Path",
     cell: ({ row }) => (
       <div className="font-medium">
         {row.original.block_path > "3" ? "Trade Arena" : "Academy"}
@@ -100,7 +100,7 @@ export const userColumns = (
   },
   {
     accessorKey: "block_level",
-    header: "Block Level",
+    header: "Block Trader Level",
   },
   {
     accessorKey: "account_status",

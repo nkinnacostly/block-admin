@@ -53,17 +53,17 @@ const DashboardSidebar = () => {
       },
       {
         icon: <GiProgression />,
-        title: "Trade Profile",
+        title: "Traders Profile",
         link: "/dashboard/progress",
       },
       {
         icon: <TbTargetArrow />,
-        title: "Copy Trades",
+        title: "Signal Providers Request",
         link: "/dashboard/copy-trade",
       },
       {
         icon: <TbCheck />,
-        title: "Approved Copy Trades",
+        title: "Approved Signal Providers",
         link: "/dashboard/approved-copy-trades",
       },
       {
@@ -73,7 +73,7 @@ const DashboardSidebar = () => {
       },
       {
         icon: <TbTargetArrow />,
-        title: "Journal Requests",
+        title: "Reset Journal Request",
         link: "/dashboard/journal-request",
       },
       // {

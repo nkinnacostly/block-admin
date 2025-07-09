@@ -98,7 +98,7 @@ export default function TopTraders() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Pending Copy Traders</CardTitle>
+        <CardTitle>Signal Provider Request</CardTitle>
       </CardHeader>
       <Separator />
       <CardContent className="mt-3 p-6">
