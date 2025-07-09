@@ -94,7 +94,7 @@ export const userColumns = (
     header: "Block Trader Path",
     cell: ({ row }) => (
       <div className="font-medium">
-        {row.original.block_path > "3" ? "Trade Arena" : "Academy"}
+        {row.original.learners_level > "3" ? "Trade Arena" : "Academy"}
       </div>
     ),
   },
