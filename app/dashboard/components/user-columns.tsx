@@ -101,6 +101,9 @@ export const userColumns = (
   {
     accessorKey: "block_level",
     header: "Block Trader Level",
+    cell: ({ row }) => (
+      <div className="font-medium">{row.original.learners_level}</div>
+    ),
   },
   {
     accessorKey: "account_status",
