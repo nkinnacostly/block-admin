@@ -5,6 +5,7 @@ import { useGetAllPendingResetRequest } from "../services/get-all-pending-reques
 import { useApproveRequest } from "../services/approve-request";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 interface ResetRequest {
   id: number;
@@ -32,7 +33,12 @@ interface ApiResponse {
 function AllRestJournalRequest() {
   const { data, isLoading, error, refetch } = useGetAllPendingResetRequest();
   const [approveId, setApproveId] = React.useState<string | undefined>();
-  const { refetch: approveRefetch, isSuccess } = useApproveRequest(approveId);
+  const {
+    refetch: approveRefetch,
+    isSuccess,
+    isLoading: isApproving,
+  } = useApproveRequest(approveId);
+  const [isDeclined, setIsDeclined] = React.useState<boolean>(false);
   const requests = data?.data as ApiResponse;
 
   React.useEffect(() => {
@@ -51,8 +57,9 @@ function AllRestJournalRequest() {
 
   const handleDecline = async (id: number) => {
     try {
+      setIsDeclined(true);
       await axios.post(
-        `https://block-traders.com.blocktraders.academy/api/admin/decline-reset-profile/${id}`
+        `https://block-traders.com.blocktraders.academy/api/admin/decline-reset-profile/${id}`,
       );
       refetch(); // Refresh the list
     } catch (error) {
@@ -110,40 +117,42 @@ function AllRestJournalRequest() {
             <tbody className="divide-y divide-gray-200">
               {requests.data.data?.map((request: ResetRequest) => (
                 <tr key={request.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {request.id}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     ${request.starting_equity}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {request.broker}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {request.login}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {request.server_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {request.reason}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {new Date(request.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
+                    <Button
                       onClick={() => handleApprove(request.id)}
+                      isLoading={isApproving}
                       className="text-green-600 hover:text-green-900 mr-4"
                     >
                       Approve
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleDecline(request.id)}
+                      isLoading={isDeclined}
                       className="text-red-600 hover:text-red-900"
                     >
                       Decline
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
