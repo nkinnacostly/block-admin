@@ -142,14 +142,15 @@ function AllRestJournalRequest() {
                     <Button
                       onClick={() => handleApprove(request.id)}
                       isLoading={isApproving}
-                      className="text-green-600 hover:text-green-900 mr-4"
+                      className=" hover:text-green-900 mr-4"
+                      variant={"default"}
                     >
                       Approve
                     </Button>
                     <Button
                       onClick={() => handleDecline(request.id)}
                       isLoading={isDeclined}
-                      className="text-red-600 hover:text-red-900"
+                      variant={"destructive"}
                     >
                       Decline
                     </Button>
