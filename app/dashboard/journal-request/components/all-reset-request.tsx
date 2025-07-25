@@ -6,6 +6,7 @@ import { useApproveRequest } from "../services/approve-request";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ResetRequest {
   id: number;
@@ -33,6 +34,7 @@ interface ApiResponse {
 function AllRestJournalRequest() {
   const { data, isLoading, error, refetch } = useGetAllPendingResetRequest();
   const [approveId, setApproveId] = React.useState<string | undefined>();
+  const queryClient = useQueryClient();
   const {
     refetch: approveRefetch,
     isSuccess,
@@ -47,9 +49,12 @@ function AllRestJournalRequest() {
     }
     if (isSuccess) {
       toast.success("Request approved successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["all-pending-journal"],
+      });
       setApproveId(undefined);
     }
-  }, [approveId, approveRefetch, refetch, isSuccess]);
+  }, [approveId, approveRefetch, refetch, isSuccess, queryClient]);
 
   const handleApprove = async (id: number) => {
     setApproveId(id.toString());
