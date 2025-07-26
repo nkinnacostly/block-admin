@@ -63,7 +63,7 @@ function AllRestJournalRequest() {
   const handleDecline = async (id: number) => {
     try {
       setIsDeclined(true);
-      await axios.post(
+      await axios.put(
         `https://block-traders.com.blocktraders.academy/api/admin/reject-reset-profile/${id}`,
       );
       refetch(); // Refresh the list
