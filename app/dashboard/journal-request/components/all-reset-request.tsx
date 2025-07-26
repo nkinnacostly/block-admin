@@ -56,6 +56,9 @@ function AllRestJournalRequest() {
     if (approveId) {
       approveRefetch();
     }
+    if (rejectId) {
+      rejectRequest();
+    }
 
     if (isSuccess) {
       toast.success("Request approved successfully");
@@ -88,7 +91,6 @@ function AllRestJournalRequest() {
 
   const handleDecline = async (id: number) => {
     setRejectId(id.toString());
-    rejectRequest();
   };
 
   if (isLoading) {
