@@ -12,12 +12,20 @@ export const useApproveRequest = (id?: string) => {
 };
 
 export const useRejectRequest = (id?: string) => {
-  const { useGet } = useFetchLevel2();
+  const { useMutationRequest } = useFetchLevel2();
   const url = `admin/reject-reset-profile/${id}`;
-  const reqKey = ["reject-journal"];
-  const { data, error, isLoading, refetch, isSuccess } = useGet(url, reqKey, {
-    enabled: false,
-  });
+  const { data, error, isSuccess, mutateAsync, isPending } =
+    useMutationRequest();
 
-  return { data, error, isLoading, refetch, isSuccess };
+  const rejectRequest = () => {
+    return mutateAsync({
+      url,
+      method: "PUT",
+      data: {
+        reason: "Rejected by admin",
+      },
+    });
+  };
+
+  return { data, error, isSuccess, rejectRequest, isPending };
 };

@@ -38,26 +38,25 @@ function AllRestJournalRequest() {
   const { data, isLoading, error, refetch } = useGetAllPendingResetRequest();
   const [approveId, setApproveId] = React.useState<string | undefined>();
   const [rejectId, setRejectId] = React.useState<string | undefined>();
+  const {
+    rejectRequest,
+    isPending,
+    isSuccess: isRejected,
+  } = useRejectRequest(rejectId);
   const queryClient = useQueryClient();
   const {
     refetch: approveRefetch,
     isSuccess,
     isLoading: isApproving,
   } = useApproveRequest(approveId);
-  const {
-    refetch: rejectRefetch,
-    isSuccess: isRejected,
-    isLoading: isDeclining,
-  } = useRejectRequest(rejectId);
+
   const requests = data?.data as ApiResponse;
 
   React.useEffect(() => {
     if (approveId) {
       approveRefetch();
     }
-    if (rejectId) {
-      rejectRefetch();
-    }
+
     if (isSuccess) {
       toast.success("Request approved successfully");
       queryClient.invalidateQueries({
@@ -79,7 +78,7 @@ function AllRestJournalRequest() {
     isSuccess,
     queryClient,
     rejectId,
-    rejectRefetch,
+    rejectRequest,
     isRejected,
   ]);
 
@@ -89,6 +88,7 @@ function AllRestJournalRequest() {
 
   const handleDecline = async (id: number) => {
     setRejectId(id.toString());
+    rejectRequest();
   };
 
   if (isLoading) {
@@ -173,7 +173,7 @@ function AllRestJournalRequest() {
                     </Button>
                     <Button
                       onClick={() => handleDecline(request.id)}
-                      isLoading={isDeclining}
+                      isLoading={isPending}
                       variant={"destructive"}
                     >
                       Decline
