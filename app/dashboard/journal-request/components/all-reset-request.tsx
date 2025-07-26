@@ -6,10 +6,10 @@ import {
   useApproveRequest,
   useRejectRequest,
 } from "../services/approve-request";
-import { toast } from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface ResetRequest {
   id: number;
@@ -52,38 +52,18 @@ function AllRestJournalRequest() {
 
   const requests = data?.data as ApiResponse;
 
-  React.useEffect(() => {
-    if (approveId) {
-      approveRefetch();
-    }
-    if (rejectId) {
-      rejectRequest();
-    }
+  // React.useEffect(() => {
 
-    if (isSuccess) {
-      toast.success("Request approved successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["all-pending-journal"],
-      });
-      setApproveId(undefined);
-    }
-    if (isRejected) {
-      toast.success("Request declined successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["all-pending-journal"],
-      });
-      setRejectId(undefined);
-    }
-  }, [
-    approveId,
-    approveRefetch,
-    refetch,
-    isSuccess,
-    queryClient,
-    rejectId,
-    rejectRequest,
-    isRejected,
-  ]);
+  // }, [
+  //   approveId,
+  //   approveRefetch,
+  //   refetch,
+  //   isSuccess,
+  //   queryClient,
+  //   rejectId,
+  //   rejectRequest,
+  //   isRejected,
+  // ]);
 
   const handleApprove = async (id: number) => {
     setApproveId(id.toString());
@@ -92,7 +72,29 @@ function AllRestJournalRequest() {
   const handleDecline = async (id: number) => {
     setRejectId(id.toString());
   };
+  if (rejectId) {
+    rejectRequest();
+  }
+  if (approveId) {
+    approveRefetch();
+  }
+  if (isSuccess) {
+    toast.success("Request approved successfully");
+    refetch();
 
+    queryClient.invalidateQueries({
+      queryKey: ["all-pending-journal"],
+    });
+    setApproveId(undefined);
+  }
+  if (isRejected) {
+    toast.success("Request declined successfully");
+    refetch();
+    queryClient.invalidateQueries({
+      queryKey: ["all-pending-journal"],
+    });
+    setRejectId(undefined);
+  }
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">Loading...</div>
