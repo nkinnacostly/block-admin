@@ -2,12 +2,14 @@
 import React from "react";
 
 import { useGetAllPendingResetRequest } from "../services/get-all-pending-request";
-import { useApproveRequest } from "../services/approve-request";
+import {
+  useApproveRequest,
+  useRejectRequest,
+} from "../services/approve-request";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
-import { getSessionStorageItem } from "@/utils/storage";
 
 interface ResetRequest {
   id: number;
@@ -35,19 +37,26 @@ interface ApiResponse {
 function AllRestJournalRequest() {
   const { data, isLoading, error, refetch } = useGetAllPendingResetRequest();
   const [approveId, setApproveId] = React.useState<string | undefined>();
+  const [rejectId, setRejectId] = React.useState<string | undefined>();
   const queryClient = useQueryClient();
-  const token = getSessionStorageItem({ key: "__session" });
   const {
     refetch: approveRefetch,
     isSuccess,
     isLoading: isApproving,
   } = useApproveRequest(approveId);
-  const [isDeclined, setIsDeclined] = React.useState<boolean>(false);
+  const {
+    refetch: rejectRefetch,
+    isSuccess: isRejected,
+    isLoading: isDeclining,
+  } = useRejectRequest(rejectId);
   const requests = data?.data as ApiResponse;
 
   React.useEffect(() => {
     if (approveId) {
       approveRefetch();
+    }
+    if (rejectId) {
+      rejectRefetch();
     }
     if (isSuccess) {
       toast.success("Request approved successfully");
@@ -56,31 +65,30 @@ function AllRestJournalRequest() {
       });
       setApproveId(undefined);
     }
-  }, [approveId, approveRefetch, refetch, isSuccess, queryClient]);
+    if (isRejected) {
+      toast.success("Request declined successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["all-pending-journal"],
+      });
+      setRejectId(undefined);
+    }
+  }, [
+    approveId,
+    approveRefetch,
+    refetch,
+    isSuccess,
+    queryClient,
+    rejectId,
+    rejectRefetch,
+    isRejected,
+  ]);
 
   const handleApprove = async (id: number) => {
     setApproveId(id.toString());
   };
 
   const handleDecline = async (id: number) => {
-    try {
-      setIsDeclined(true);
-      await axios.put(
-        `https://block-traders.com.blocktraders.academy/api/admin/reject-reset-profile/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      refetch(); // Refresh the list
-      toast.success("Request declined successfully");
-      setIsDeclined(false);
-    } catch (error) {
-      console.error("Error declining request:", error);
-      toast.error("Error declining request");
-      setIsDeclined(false);
-    }
+    setRejectId(id.toString());
   };
 
   if (isLoading) {
@@ -165,7 +173,7 @@ function AllRestJournalRequest() {
                     </Button>
                     <Button
                       onClick={() => handleDecline(request.id)}
-                      isLoading={isDeclined}
+                      isLoading={isDeclining}
                       variant={"destructive"}
                     >
                       Decline

@@ -10,3 +10,14 @@ export const useApproveRequest = (id?: string) => {
 
   return { data, error, isLoading, refetch, isSuccess };
 };
+
+export const useRejectRequest = (id?: string) => {
+  const { useGet } = useFetchLevel2();
+  const url = `admin/reject-reset-profile/${id}`;
+  const reqKey = ["reject-journal"];
+  const { data, error, isLoading, refetch, isSuccess } = useGet(url, reqKey, {
+    enabled: false,
+  });
+
+  return { data, error, isLoading, refetch, isSuccess };
+};
