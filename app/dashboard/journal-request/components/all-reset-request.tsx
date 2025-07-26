@@ -64,7 +64,7 @@ function AllRestJournalRequest() {
     try {
       setIsDeclined(true);
       await axios.post(
-        `https://block-traders.com.blocktraders.academy/api/admin/decline-reset-profile/${id}`,
+        `https://block-traders.com.blocktraders.academy/api/admin/reject-reset-profile/${id}`,
       );
       refetch(); // Refresh the list
     } catch (error) {
