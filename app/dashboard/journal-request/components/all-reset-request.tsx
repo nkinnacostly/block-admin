@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
+import { getSessionStorageItem } from "@/utils/storage";
 
 interface ResetRequest {
   id: number;
@@ -35,6 +36,7 @@ function AllRestJournalRequest() {
   const { data, isLoading, error, refetch } = useGetAllPendingResetRequest();
   const [approveId, setApproveId] = React.useState<string | undefined>();
   const queryClient = useQueryClient();
+  const token = getSessionStorageItem({ key: "__session" });
   const {
     refetch: approveRefetch,
     isSuccess,
@@ -65,10 +67,19 @@ function AllRestJournalRequest() {
       setIsDeclined(true);
       await axios.put(
         `https://block-traders.com.blocktraders.academy/api/admin/reject-reset-profile/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       refetch(); // Refresh the list
+      toast.success("Request declined successfully");
+      setIsDeclined(false);
     } catch (error) {
       console.error("Error declining request:", error);
+      toast.error("Error declining request");
+      setIsDeclined(false);
     }
   };
 
