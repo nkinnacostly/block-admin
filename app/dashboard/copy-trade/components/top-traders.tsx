@@ -18,6 +18,8 @@ interface Trader {
   user_name: string;
   equity_growth: number;
   status: string | number;
+  last_trade_date: string[];
+  win_rate: number;
 }
 
 interface TopTradersResponse {
@@ -35,6 +37,7 @@ export default function TopTraders() {
   const queryClient = useQueryClient();
   const response = data as AxiosResponse<TopTradersResponse> | undefined;
   const traders = response?.data?.data;
+  console.log(traders);
 
   const [approveLoading, setApproveLoading] = React.useState<
     Record<string, boolean>
@@ -114,21 +117,35 @@ export default function TopTraders() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Equity</p>
-                    <p className="text-lg font-medium">${trader.equity}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Return on Equity
+                    </p>
+                    <p className="text-lg font-medium">
+                      {trader.equity_growth}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">1 Week Gain</p>
+                    <p className="text-sm text-muted-foreground">
+                      5-Day Rolling Return
+                    </p>
                     <p className="text-lg font-medium ">
                       +${trader.one_week_gain}
                     </p>
                   </div>
-                </div>
-                <div className="mt-2">
-                  <p className="text-sm text-muted-foreground">Performance</p>
-                  <p className="text-lg font-medium ">
-                    +{trader.equity_growth}
-                  </p>
+                  <div className="mt-2">
+                    <p className="text-sm text-muted-foreground">
+                      Last Trade Date
+                    </p>
+                    <p className="text-lg font-medium text-green-500">
+                      {trader.last_trade_date[0]}
+                    </p>
+                  </div>
+                  <div className="mt-2 text-right">
+                    <p className="text-sm text-muted-foreground">Win Rate</p>
+                    <p className="text-lg font-medium text-green-500">
+                      {trader.win_rate.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-2 mt-4">
                   <button

@@ -18,6 +18,9 @@ interface Trader {
   user_name: string;
   equity_growth: number;
   status: string | number;
+  win_rate: number;
+  trader_level: number;
+  last_trade_date: string[];
 }
 
 interface TopTradersResponse {
@@ -95,26 +98,40 @@ export default function TopTraders() {
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold">{trader.user_name}</h3>
                   <span className="text-sm text-muted-foreground">
-                    Level {trader.weekly_profit}
+                    Level {trader.trader_level}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Equity</p>
-                    <p className="text-lg font-medium">${trader.equity}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Return on Equity
+                    </p>
+                    <p className="text-lg font-medium">
+                      {trader.equity_growth}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">1 Week Gain</p>
+                    <p className="text-sm text-muted-foreground">
+                      5-Day Rolling Return
+                    </p>
                     <p className="text-lg font-medium ">
                       +${trader.one_week_gain}
                     </p>
                   </div>
-                </div>
-                <div className="mt-2">
-                  <p className="text-sm text-muted-foreground">Performance</p>
-                  <p className="text-lg font-medium ">
-                    +{trader.equity_growth}
-                  </p>
+                  <div className="mt-2">
+                    <p className="text-sm text-muted-foreground">
+                      Last Trade Date
+                    </p>
+                    <p className="text-lg font-medium text-green-500">
+                      {trader.last_trade_date[0]}
+                    </p>
+                  </div>
+                  <div className="mt-2 text-right">
+                    <p className="text-sm text-muted-foreground">Win Rate</p>
+                    <p className="text-lg font-medium text-green-500">
+                      {trader.win_rate.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-2 mt-4">
                   <button
