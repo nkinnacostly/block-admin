@@ -64,7 +64,7 @@ const LoginComponent: React.FC = () => {
       <form
         action="post"
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4"
+        className="space-y-4 w-full"
       >
         {/* <TimeoutAlert message={error?.error} show={isError} duration={3000} /> */}
         <Input
@@ -75,6 +75,7 @@ const LoginComponent: React.FC = () => {
           type="text"
           {...register("username")}
           // error={errors.username}
+          className="w-full"
         />
         <Input
           placeholder={"Enter Password"}
@@ -83,12 +84,9 @@ const LoginComponent: React.FC = () => {
           {...register("password")}
           // error={errors.password}
           required
+          className="w-full"
         />
-        <p className="text-[16px] font-[400]  p-2 mt-2">
-          By creating an account, you agree to the{" "}
-          <span className="underline cursor-pointer">Terms of use</span> and{" "}
-          <span className="underline cursor-pointer">Privacy Policy</span>.
-        </p>
+
         <Button
           // btnText={"Login"}
           className={"disabled:bg-gray-400 bg-yellow-400 w-full"}
