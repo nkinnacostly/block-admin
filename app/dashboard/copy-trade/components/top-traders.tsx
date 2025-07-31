@@ -124,7 +124,7 @@ export default function TopTraders() {
                       {trader.equity_growth}
                     </p>
                   </div>
-                  <div>
+                  <div className="mt-2 text-right">
                     <p className="text-sm text-muted-foreground">
                       5-Day Rolling Return
                     </p>
