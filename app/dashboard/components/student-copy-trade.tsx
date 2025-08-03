@@ -47,18 +47,13 @@ function StudentCopyTrade({ id }: { id: string }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Student Copy Trade</CardTitle>
+        <CardTitle>Student Journaled Trades</CardTitle>
       </CardHeader>
       <Separator />
       <CardContent className="py-6">
         {copyTradeProfile?.data?.data &&
         copyTradeProfile?.data?.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-6">
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">
-                Student Copy Trade Details
-              </h3>
-            </div>
             {copyTradeProfile.data.data.map((trade) => (
               <div
                 key={trade.id}
