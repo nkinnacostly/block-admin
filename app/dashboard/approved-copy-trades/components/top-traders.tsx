@@ -115,7 +115,7 @@ export default function TopTraders() {
                       5-Day Rolling Return
                     </p>
                     <p className="text-lg font-medium ">
-                      +${trader.one_week_gain}
+                      {trader.one_week_gain}
                     </p>
                   </div>
                   <div className="mt-2">
