@@ -12,7 +12,7 @@ export const useGetSingleStudentTradeProfile = (id: string) => {
 };
 
 export const useGetSingleStudentTraderWinRates = (id: string) => {
-  const url = `http://admin-api.blocktradersacademy.com/api/equityGrowth?user_id=${id}`;
+  const url = `https://admin-api.blocktradersacademy.com/api/equityGrowth?user_id=${id}`;
   const token = getSessionStorageItem({ key: "__session" });
   const reqKey = ["admin-students-trade-win-rates", id];
   const { data, error, isLoading, isFetching } = useQuery({
