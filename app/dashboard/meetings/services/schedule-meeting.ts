@@ -41,51 +41,73 @@ export function useScheduleMeeting() {
     ApiError
   >();
 
-  const handleError = (error: Error) => {
-    const apiError = error as unknown as ApiError;
-    if (apiError.errors) {
-      // Handle validation errors
-      Object.entries(apiError.errors).forEach(([, messages]) => {
-        messages.forEach((message: string) => toast.error(message));
-      });
+  const handleError = (error: unknown) => {
+    console.log(error);
+
+    if (error && typeof error === "object" && "message" in error) {
+      const errorObj = error as any;
+
+      // Check if message contains validation errors (nested object structure)
+      if (errorObj.message && typeof errorObj.message === "object") {
+        // Handle validation errors from nested message structure
+        Object.entries(errorObj.message).forEach(
+          ([field, messages]: [string, any]) => {
+            if (Array.isArray(messages)) {
+              messages.forEach((message: string) => {
+                toast.error(`${field}: ${message}`);
+              });
+            } else if (typeof messages === "string") {
+              toast.error(`${field}: ${messages}`);
+            }
+          }
+        );
+      } else if (errorObj.errors) {
+        // Handle validation errors from errors field
+        Object.entries(errorObj.errors).forEach(
+          ([, messages]: [string, any]) => {
+            if (Array.isArray(messages)) {
+              messages.forEach((message: string) => toast.error(message));
+            }
+          }
+        );
+      } else {
+        // Handle general error message
+        toast.error(errorObj.message || "Failed to schedule meeting");
+      }
     } else {
-      // Handle general error
-      toast.error(error.message || "Failed to schedule meeting");
+      // Handle unknown error
+      toast.error("Failed to schedule meeting");
     }
   };
-
+  console.log(error);
   const scheduleMeeting = async (meetingData: ScheduleMeetingRequest) => {
-    try {
-      await mutate(
-        {
-          url: "/admin/Schedule-meeting",
-          method: "POST",
-          data: {
-            ...meetingData,
-            message: "",
-            status: 0,
-          },
+    mutate(
+      {
+        url: "/admin/Schedule-meeting",
+        method: "POST",
+        data: {
+          ...meetingData,
+          message: "",
+          status: 0,
         },
-        {
-          onSuccess: (response: AxiosResponse<ScheduleMeetingResponse>) => {
-            // Invalidate and refetch meetings query
-            queryClient.invalidateQueries({ queryKey: ["admin-meetings"] });
+      },
+      {
+        onSuccess: (response: AxiosResponse<ScheduleMeetingResponse>) => {
+          console.log(response);
+          // Invalidate and refetch meetings query
+          queryClient.invalidateQueries({ queryKey: ["admin-meetings"] });
 
-            // Show success message
-            toast.success(
-              response.data.message || "Meeting scheduled successfully"
-            );
+          // Show success message
+          toast.success(
+            response.data.message || "Meeting scheduled successfully"
+          );
 
-            // Redirect to meetings page
-            router.push("/dashboard/meetings");
-          },
-          onError: handleError,
-        }
-      );
-    } catch (err) {
-      // Error handling is managed by the mutation's onError callback
-      console.error("Schedule meeting error:", err);
-    }
+          // Redirect to meetings page
+          router.push("/dashboard/meetings");
+        },
+        onError: handleError,
+      }
+    );
   };
 
   return {

@@ -43,7 +43,7 @@ type MeetingFormData = z.infer<typeof meetingSchema>;
 
 function CreateMeeting() {
   // const queryClient = useQueryClient();
-  const { scheduleMeeting, isPending, error } = useScheduleMeeting();
+  const { scheduleMeeting, isPending } = useScheduleMeeting();
   const form = useForm<MeetingFormData>({
     resolver: zodResolver(meetingSchema),
     defaultValues: {
@@ -280,7 +280,7 @@ function CreateMeeting() {
                 </p>
               )}
             </div>
-
+            {/* 
             {error && (
               <div className="text-sm text-red-500">
                 {error instanceof Error ? error.message : String(error)}
@@ -297,7 +297,7 @@ function CreateMeeting() {
                     </div>
                   ))}
               </div>
-            )}
+            )} */}
 
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? "Scheduling..." : "Schedule Meeting"}

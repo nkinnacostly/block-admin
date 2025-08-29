@@ -66,9 +66,10 @@ function useApiClientLevel2() {
         handleUnauthorized();
       }
 
-      const errorMessage =
-        axiosError.response?.data?.message || axiosError.message;
-      throw new Error(`Request failed: ${errorMessage}`);
+      console.log(axiosError.response?.data);
+
+      // Return rejected promise instead of throwing
+      return Promise.reject(axiosError.response?.data || axiosError);
     }
   };
 

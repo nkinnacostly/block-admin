@@ -22,7 +22,7 @@ interface Trader {
   win_rate: number;
 }
 
-interface TopTradersResponse {
+export interface TopTradersResponse {
   message: string;
   data: Trader[];
 }

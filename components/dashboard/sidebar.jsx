@@ -4,6 +4,7 @@ import { GiProgression } from "react-icons/gi";
 import { GoBook } from "react-icons/go";
 import Image from "next/image";
 import { IoMdSettings } from "react-icons/io";
+
 // import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { MdDashboard, MdOutlineMeetingRoom } from "react-icons/md";
@@ -12,28 +13,49 @@ import { TbTargetArrow } from "react-icons/tb";
 import { TbCheck } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useUserStore } from "@/store/store";
+import { useGetCopyTrades } from "@/app/dashboard/copy-trade/services/get-copy-trades";
+import { useGetAllPendingResetRequest } from "@/app/dashboard/journal-request/services/get-all-pending-request";
 // import { useUserStore } from "@/store/store";
 // import { useVideoStore } from "@/store/store";
 
-const SidebarLink = memo(({ icon, title, link, isActive, disabled }) => (
-  <Link
-    className={`
-      flex items-center justify-start rounded-lg px-3 cursor-pointer
+const SidebarLink = memo(
+  ({ icon, title, link, isActive, disabled, traders, resetTraders }) => (
+    <Link
+      className={`
+      flex items-center justify-start rounded-lg px-3 relative cursor-pointer
       ${isActive ? "bg-[#1E1E1E99] border border-green-300" : ""}
       ${disabled ? "pointer-events-none opacity-50" : ""}
       hover:bg-[#1E1E1E66] transition-colors
     `}
-    href={disabled ? "#" : link}
-  >
-    <span className="flex items-center justify-center w-6">{icon}</span>
-    <span className="text-[16px] font-[400] p-2">{title}</span>
-  </Link>
-));
+      href={disabled ? "#" : link}
+    >
+      <span className="flex items-center justify-center w-6">{icon}</span>
+      <span className="text-[16px] font-[400] p-2">{title}</span>
+      {title === "Signal Providers Request" && (
+        <span className="absolute -right-2 -top-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+          {traders?.length}
+        </span>
+      )}
+      {title === "Reset Journal Request" && (
+        <span className="absolute -right-2 -top-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+          {resetTraders?.length}
+        </span>
+      )}
+    </Link>
+  )
+);
 
 SidebarLink.displayName = "SidebarLink";
 
 const DashboardSidebar = () => {
   const { loggedInUserDetails } = useUserStore();
+  const { data } = useGetCopyTrades();
+  const response = data;
+  const traders = response?.data?.data;
+  const { data: resetData } = useGetAllPendingResetRequest();
+  const resetResponse = resetData;
+  const resetTraders = resetResponse?.data?.data.data;
+
   // const { watchedVideos } = useVideoStore();
   // const router = useRouter();
   // const isLevel1 = loggedInUserDetails?.learners_level === "1";
@@ -114,6 +136,8 @@ const DashboardSidebar = () => {
             link={link.link}
             isActive={pathname === link.link}
             disabled={link.disabled}
+            traders={traders}
+            resetTraders={resetTraders}
           />
         ))}
       </nav>
