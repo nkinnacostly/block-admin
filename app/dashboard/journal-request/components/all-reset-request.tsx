@@ -23,6 +23,13 @@ interface ResetRequest {
   created_at: string;
   updated_at: string;
   reason: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    phone: string;
+    address: string;
+  };
 }
 
 interface ApiResponse {
@@ -142,7 +149,7 @@ function AllRestJournalRequest() {
           <thead>
             <tr className="">
               <th className="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                ID
+                Username
               </th>
               <th className="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Starting Equity
@@ -178,7 +185,7 @@ function AllRestJournalRequest() {
               requestList.map((request: ResetRequest) => (
                 <tr key={request.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                    {request.id}
+                    {request.user.username}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     ${request.starting_equity}
