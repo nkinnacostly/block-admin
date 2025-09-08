@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import useFetchLevel2 from "@/hooks/useFetchLevel2";
+import { handleApiError } from "@/utils/error-parser";
 
 const CreateUserSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -72,7 +73,7 @@ export default function CreateUserPage() {
           });
         },
         onError: (error: CreateUserError) => {
-          toast.error(error.message);
+          handleApiError(error);
         },
       }
     );

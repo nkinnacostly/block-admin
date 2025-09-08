@@ -8,6 +8,7 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { getSessionStorageItem } from "../utils/storage";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { handleApiError } from "@/utils/error-parser";
 
 interface ApiError {
   message: string;
@@ -67,9 +68,12 @@ function useApiClientLevel2() {
       }
 
       console.log(axiosError.response?.data);
+      handleApiError(axiosError.response?.data);
 
       // Return rejected promise instead of throwing
-      return Promise.reject(axiosError.response?.data || axiosError);
+      throw new Error(JSON.stringify(axiosError.response?.data.message));
+
+      // return Promise.reject(axiosError.response?.data.message || axiosError.response?.data.message  );
     }
   };
 
