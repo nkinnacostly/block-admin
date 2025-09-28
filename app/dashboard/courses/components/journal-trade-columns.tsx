@@ -8,7 +8,7 @@ import { UpdateCopyTraderButton } from "./update-copy-trader-button";
 import { User } from "../../components/user-columns";
 
 export interface JournalTrade {
-  id: number;
+  id: string | number;
   trading_pair: string;
   trade_type: string;
   price: string;
@@ -25,6 +25,7 @@ export interface JournalTrade {
 }
 
 export interface EditJournalTrade {
+  id?: string | number;
   trading_pair: string;
   trade_type: string;
   price: string;

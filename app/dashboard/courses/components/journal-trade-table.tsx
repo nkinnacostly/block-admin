@@ -16,7 +16,7 @@ import { User } from "../../components/user-columns";
 import { EditJournalTradeModal } from "./edit-journal-trade-modal";
 import { Edit2Icon } from "lucide-react";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { useUserStore } from "@/store/store";
+// import { useUserStore } from "@/store/store";
 import { UpdateCopyTraderButton } from "./update-copy-trader-button";
 
 interface ApiResponse {
@@ -31,7 +31,7 @@ function JournalTradeTable() {
   const [selectedTrade, setSelectedTrade] = useState<JournalTrade | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditLoading, setIsEditLoading] = useState(false);
-  const { loggedInUserDetails } = useUserStore();
+  // const { loggedInUserDetails } = useUserStore();
   const { data, error, isLoading } = GetTradesEntry() as {
     data: ApiResponse | undefined;
     error: any;
@@ -78,7 +78,7 @@ function JournalTradeTable() {
     updateTrade(
       {
         method: "PUT",
-        url: `/admin/update-journal-trades/${loggedInUserDetails?.id}`,
+        url: `/admin/update-journal-trades/${updatedTrade.id}`,
         data: editPayload,
       },
       {
